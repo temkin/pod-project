@@ -1,4 +1,8 @@
-import { CodeScanner, ScanningInstructions } from "./components";
+import {
+  CodeScanner,
+  ScanningInstructions,
+  SignatureCanvas,
+} from "./components";
 
 const App = () => {
   return (
@@ -6,6 +10,7 @@ const App = () => {
       <h1>Barcode Scanner</h1>
       <ScanningInstructions />
       <CodeScanner />
+      <SignatureCanvas />
     </>
   );
 };
