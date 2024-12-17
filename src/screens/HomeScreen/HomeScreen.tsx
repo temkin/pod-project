@@ -42,7 +42,7 @@ const HomeScreen = () => {
             onClick={handleScanClick}
             variant="contained"
             fullWidth
-            startIcon={<ScanIcon />}
+            startIcon={<ScanIcon sx={styles.icon} />}
             sx={{
               ...styles.button,
               bgcolor: "#2196f3",
@@ -59,12 +59,13 @@ const HomeScreen = () => {
           <Button
             variant="contained"
             fullWidth
-            startIcon={<HistoryIcon />}
+            startIcon={<HistoryIcon sx={styles.icon} />}
+            color="secondary"
             sx={{
               ...styles.button,
-              bgcolor: "#4caf50",
+              bgcolor: "#42464D",
               "&:hover": {
-                bgcolor: "#388e3c",
+                bgcolor: "#42464D ",
               },
             }}
           >
