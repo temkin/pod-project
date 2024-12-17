@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import { HomeScreen, ScanScreen, SignatureScreen } from "../screens";
 
 const Root = () => {
@@ -6,10 +6,8 @@ const Root = () => {
     <Routes>
       <Route index path="/" element={<HomeScreen />} />
       <Route path="/scan" element={<ScanScreen />} />
-      <Route path="/signature" element={<SignatureScreen />}>
-        <Route path=":code" element={<SignatureScreen />} />
-      </Route>
-      <Route path="*" element={<HomeScreen />} />
+      <Route path="/signature/:code" element={<SignatureScreen />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };
