@@ -9,25 +9,12 @@ import {
 } from "@mui/material";
 import { QrCode as QrCodeIcon } from "@mui/icons-material";
 import { SignedCodeHistoryItem } from "../../components";
-import { SignedCode } from "../../components/types";
 import styles from "./styles";
-
-const mockSignedCodes: SignedCode[] = [
-  {
-    id: "1",
-    code: "123456789",
-    timestamp: "2024-01-20 14:30",
-    signature: "User",
-  },
-  {
-    id: "2",
-    code: "987654321",
-    timestamp: "2024-01-20 13:15",
-    signature: "User",
-  },
-];
+import { useAppSelector, selectAllSignedCodes } from "../../store";
 
 const SignedCodesHistoryScreen = () => {
+  const signedCodes = useAppSelector(selectAllSignedCodes);
+
   return (
     <Container maxWidth="sm" sx={styles.container}>
       <Box sx={styles.header}>
@@ -40,9 +27,9 @@ const SignedCodesHistoryScreen = () => {
       </Box>
 
       <Paper sx={styles.listContainer} elevation={2}>
-        {mockSignedCodes.length > 0 ? (
+        {signedCodes.length > 0 ? (
           <List disablePadding>
-            {mockSignedCodes.map((item, index) => (
+            {signedCodes.map((item, index) => (
               <React.Fragment key={item.id}>
                 {index > 0 && <Divider />}
                 <SignedCodeHistoryItem item={item} />

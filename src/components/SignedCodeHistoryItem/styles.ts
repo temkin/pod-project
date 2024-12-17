@@ -28,14 +28,32 @@ const styles = {
   copyButton: {
     color: "text.secondary",
   },
-  barcodeContainer: {
-    mt: 2,
+  expandedContent: {
     p: 2,
     bgcolor: "#fff",
-    borderRadius: 1,
+  },
+  barcodeContainer: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    p: 2,
     border: "1px solid #e0e0e0",
+    borderRadius: 1,
+  },
+  signatureContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    p: 2,
+    border: "1px solid #e0e0e0",
+    borderRadius: 1,
+  },
+  signatureImage: {
+    maxWidth: "100%",
+    height: "auto",
+    maxHeight: "100px",
+    objectFit: "contain",
+    bgcolor: "#fff",
   },
   expandButton: {
     transform: "rotate(0deg)",

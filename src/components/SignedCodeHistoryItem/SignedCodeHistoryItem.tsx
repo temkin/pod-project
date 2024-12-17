@@ -11,6 +11,7 @@ import {
   Typography,
   Chip,
   Collapse,
+  Divider,
 } from "@mui/material";
 import {
   QrCode as QrCodeIcon,
@@ -19,7 +20,7 @@ import {
   Done as DoneIcon,
   ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
-import { SignedCode } from "./types";
+import { SignedCode } from "../../store/types";
 import styles from "./styles";
 
 const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
@@ -28,6 +29,8 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
   };
+
+  const signedDateFormatted = new Date(item.timestamp).toLocaleString();
 
   return (
     <>
@@ -88,7 +91,7 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
                 gap={0.5}
               >
                 <TimeIcon fontSize="small" />
-                {item.timestamp}
+                {signedDateFormatted}
               </Typography>
               <Typography
                 component="span"
@@ -97,22 +100,41 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
                 display="block"
                 mt={0.5}
               >
-                Signed by: {item.signature}
+                Signed by: User
               </Typography>
             </Typography>
           }
         />
       </ListItem>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box sx={styles.barcodeContainer}>
-          <Barcode
-            value={item.code}
-            width={1.5}
-            height={50}
-            fontSize={14}
-            margin={10}
-            background="#ffffff"
-          />
+        <Box sx={styles.expandedContent}>
+          <Box sx={styles.barcodeContainer}>
+            <Typography variant="subtitle2" color="text.secondary" mb={1}>
+              Barcode
+            </Typography>
+            <Barcode
+              value={item.code}
+              width={1.5}
+              height={50}
+              fontSize={14}
+              margin={10}
+              background="#ffffff"
+            />
+          </Box>
+
+          <Divider sx={{ my: 2 }} />
+
+          <Box sx={styles.signatureContainer}>
+            <Typography variant="subtitle2" color="text.secondary" mb={1}>
+              Signature
+            </Typography>
+            <Box
+              component="img"
+              src={item.signature}
+              alt="Signature"
+              sx={styles.signatureImage}
+            />
+          </Box>
         </Box>
       </Collapse>
     </>
