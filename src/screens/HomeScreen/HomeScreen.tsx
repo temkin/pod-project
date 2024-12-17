@@ -4,15 +4,22 @@ import {
   CreateOutlined as SignatureIcon,
   History as HistoryIcon,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 import styles from "./styles";
 
 const HomeScreen = () => {
+  const navigate = useNavigate();
+
+  const handleScanClick = () => {
+    navigate("/scan");
+  };
+
   return (
     <Container maxWidth="sm" sx={styles.container}>
       <Grid container spacing={2} sx={styles.gridContainer}>
         <Grid size={12}>
           <Typography
-            variant="h4"
+            variant="h5"
             component="h1"
             mb={1}
             fontWeight="bold"
@@ -33,6 +40,7 @@ const HomeScreen = () => {
 
         <Grid size={12}>
           <Button
+            onClick={handleScanClick}
             variant="contained"
             fullWidth
             startIcon={<ScanIcon />}

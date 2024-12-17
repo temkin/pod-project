@@ -3,11 +3,10 @@ const styles = {
     height: "100svh",
     bgcolor: "#f5f5f5",
     display: "flex",
-    p: 1,
+    p: 2,
   },
   gridContainer: {
     maxHeight: 400,
-    px: 2,
   },
   button: {
     py: 2,
