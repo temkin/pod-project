@@ -3,7 +3,6 @@ import { SignedCodesState, SignedCode } from "./types";
 
 const initialState: SignedCodesState = {
   items: [],
-  status: "idle",
   error: null,
 };
 

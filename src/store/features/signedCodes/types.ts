@@ -7,6 +7,5 @@ export type SignedCode = {
 
 export type SignedCodesState = {
   items: SignedCode[];
-  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 };
