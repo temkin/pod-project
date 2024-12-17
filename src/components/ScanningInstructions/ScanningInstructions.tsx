@@ -5,6 +5,7 @@ import {
   CropFree as FrameIcon,
   ZoomIn as ZoomIcon,
 } from "@mui/icons-material";
+import styles from "./styles";
 
 const listItems = [
   { icon: <LightIcon />, text: "Ensure good lighting" },

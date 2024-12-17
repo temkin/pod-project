@@ -1,27 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { BrowserMultiFormatReader, Result } from "@zxing/library";
-
-export interface ScanResult {
-  code: string;
-  raw: Result;
-  timestamp: number;
-}
-
-export interface UseCodeScannerOptions {
-  onScan?: (result: ScanResult) => void;
-  onError?: (error: Error) => void;
-  debugMode?: boolean;
-}
-
-export interface UseCodeScannerReturn {
-  videoRef: React.RefObject<HTMLVideoElement>;
-  scannedCode: string;
-  error: Error | null;
-  isScanning: boolean;
-  debug: boolean;
-  restartScanning: () => void;
-  toggleDebug: () => void;
-}
+import { BrowserMultiFormatReader } from "@zxing/library";
+import {
+  ScanResult,
+  UseCodeScannerOptions,
+  UseCodeScannerReturn,
+} from "./types";
 
 export const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -170,3 +153,5 @@ export const useCodeScanner = (
     toggleDebug,
   };
 };
+
+export default useCodeScanner;

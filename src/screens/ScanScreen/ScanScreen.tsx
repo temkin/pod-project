@@ -1,14 +1,31 @@
 import { Container, Typography } from "@mui/material";
 import { Grid2 as Grid } from "@mui/material";
+import { useNavigate } from "react-router";
+import { ROUTES } from "../../app";
 import { CodeScanner, ScanningInstructions } from "../../components";
+import { ScanResult } from "../../components/types";
 import styles from "./styles";
 
 const ScanScreen = () => {
+  const navigate = useNavigate();
+
+  const handleScan = (result: ScanResult) => {
+    console.log("Scanned code:", result.code);
+  };
+
+  const handleSubmit = (code: string) => {
+    navigate(ROUTES.SIGNATURE_CODE(code));
+  };
+
+  const handleErrorScan = (error: Error) => {
+    console.error("Error scanning code:", error);
+  };
+
   return (
     <Container maxWidth="sm" sx={styles.container}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <Typography variant="h5" component="h1" mb={1} fontWeight="bold">
+          <Typography variant="h5" component="h1" fontWeight="bold">
             Scanner 🔍
           </Typography>
           <Typography
@@ -23,7 +40,11 @@ const ScanScreen = () => {
         </Grid>
 
         <Grid size={12}>
-          <CodeScanner />
+          <CodeScanner
+            onScan={handleScan}
+            onSubmit={handleSubmit}
+            onError={handleErrorScan}
+          />
         </Grid>
 
         <Grid size={12}>

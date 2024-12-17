@@ -1,5 +1,13 @@
+import React from "react";
 import SignatureCanvasBase from "react-signature-pad-wrapper";
+import { Box, Button, Paper, Typography, Alert } from "@mui/material";
+import {
+  Save as SaveIcon,
+  Clear as ClearIcon,
+  RestartAlt as RestartIcon,
+} from "@mui/icons-material";
 import { useSignature } from "./useSignature";
+import styles from "./styles";
 
 interface SignatureCanvasProps {
   onSave?: (signature: string) => void;
@@ -30,44 +38,87 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   });
 
   return (
-    <div className="signature-container">
-      <div className="canvas-container">
+    <Paper elevation={3} sx={styles.container}>
+      <Box sx={styles.signatureBox}>
         {isScanning ? (
           <SignatureCanvasBase
             ref={sigPadRef}
             canvasProps={{
-              className: "signature-canvas",
+              style: {
+                ...styles.canvas,
+                height: `${height}px`,
+                maxWidth: `${width}px`,
+              },
             }}
           />
         ) : (
-          <img
-            src={signature}
-            alt="Captured signature"
-            className="signature-image"
-            style={{ maxWidth: width, maxHeight: height }}
-          />
+          <Box sx={styles.capturedSignatureContainer}>
+            <img
+              src={signature}
+              alt="Captured signature"
+              style={{
+                ...styles.capturedImage,
+                maxHeight: height,
+              }}
+            />
+          </Box>
         )}
-      </div>
+      </Box>
 
       {error && (
-        <div className="error-container">
-          Error: {error.message}
-          <button onClick={clearSignature}>Try Again</button>
-        </div>
+        <Alert
+          severity="error"
+          sx={styles.alert}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={clearSignature}
+              startIcon={<RestartIcon />}
+            >
+              Try Again
+            </Button>
+          }
+        >
+          {error.message}
+        </Alert>
       )}
 
       {isScanning ? (
-        <div className="button-container">
-          <button onClick={saveSignature}>Save Signature</button>
-          <button onClick={clearSignature}>Clear</button>
-        </div>
+        <Box sx={styles.buttonsContainer}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<ClearIcon />}
+            onClick={clearSignature}
+          >
+            Clear
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<SaveIcon />}
+            onClick={saveSignature}
+          >
+            Save Signature
+          </Button>
+        </Box>
       ) : (
-        <div className="result-container">
-          <h3>Captured Signature</h3>
-          <button onClick={clearSignature}>Capture New Signature</button>
-        </div>
+        <Box sx={styles.capturedSection}>
+          <Typography variant="h6" component="h3" sx={styles.capturedTitle}>
+            Captured Signature
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<RestartIcon />}
+            onClick={clearSignature}
+          >
+            Capture New Signature
+          </Button>
+        </Box>
       )}
-    </div>
+    </Paper>
   );
 };
 
