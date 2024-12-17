@@ -1,17 +1,17 @@
 import { Button, Container, Grid2 as Grid, Typography } from "@mui/material";
 import {
   CropFreeOutlined as ScanIcon,
-  CreateOutlined as SignatureIcon,
   History as HistoryIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import { ROUTES } from "../../app";
 import styles from "./styles";
 
 const HomeScreen = () => {
   const navigate = useNavigate();
 
   const handleScanClick = () => {
-    navigate("/scan");
+    navigate(ROUTES.SCAN);
   };
 
   return (
@@ -21,7 +21,6 @@ const HomeScreen = () => {
           <Typography
             variant="h5"
             component="h1"
-            mb={1}
             fontWeight="bold"
             color="#000"
           >
@@ -43,7 +42,7 @@ const HomeScreen = () => {
             onClick={handleScanClick}
             variant="contained"
             fullWidth
-            startIcon={<ScanIcon />}
+            startIcon={<ScanIcon sx={styles.icon} />}
             sx={{
               ...styles.button,
               bgcolor: "#2196f3",
@@ -60,29 +59,13 @@ const HomeScreen = () => {
           <Button
             variant="contained"
             fullWidth
-            startIcon={<SignatureIcon />}
+            startIcon={<HistoryIcon sx={styles.icon} />}
+            color="secondary"
             sx={{
               ...styles.button,
-              bgcolor: "#ff4081",
+              bgcolor: "#42464D",
               "&:hover": {
-                bgcolor: "#f50057",
-              },
-            }}
-          >
-            Signature
-          </Button>
-        </Grid>
-
-        <Grid size={12}>
-          <Button
-            variant="contained"
-            fullWidth
-            startIcon={<HistoryIcon />}
-            sx={{
-              ...styles.button,
-              bgcolor: "#4caf50",
-              "&:hover": {
-                bgcolor: "#388e3c",
+                bgcolor: "#42464D ",
               },
             }}
           >

@@ -1,12 +1,13 @@
-import { Route, Routes } from "react-router";
-import { HomeScreen, ScanScreen } from "../screens";
+import { Navigate, Route, Routes } from "react-router";
+import { HomeScreen, ScanScreen, SignatureScreen } from "../screens";
 
 const Root = () => {
   return (
     <Routes>
       <Route index path="/" element={<HomeScreen />} />
       <Route path="/scan" element={<ScanScreen />} />
-      <Route path="*" element={<HomeScreen />} />
+      <Route path="/signature/:code" element={<SignatureScreen />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

@@ -12,3 +12,5 @@ const styles = {
     "&:last-child": { mb: 0 },
   },
 };
+
+export default styles;

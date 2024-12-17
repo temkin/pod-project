@@ -8,12 +8,18 @@ import {
 import {
   RestartAlt as RestartIcon,
   BugReport as DebugIcon,
+  CreateOutlined as SignatureIcon,
 } from "@mui/icons-material";
 import { MODES } from "../../env";
-import { useCodeScanner } from "./useCodeScanner";
+import useCodeScanner from "./useCodeScanner";
 import styles from "./styles";
+import { CodeScannerProps } from "./types";
 
-const CodeScanner = () => {
+const CodeScanner: React.FC<CodeScannerProps> = ({
+  onScan,
+  onSubmit,
+  onError,
+}) => {
   const {
     videoRef,
     scannedCode,
@@ -23,14 +29,16 @@ const CodeScanner = () => {
     restartScanning,
     toggleDebug,
   } = useCodeScanner({
-    onScan: (result) => {
-      console.log("Scanned:", result);
-    },
-    onError: (error) => {
-      console.error("Scanner error:", error);
-    },
+    onScan,
+    onError,
     debugMode: import.meta.env.MODE === MODES.DEV,
   });
+
+  const handleSubmit = () => {
+    if (scannedCode) {
+      onSubmit(scannedCode);
+    }
+  };
 
   return (
     <Box>
@@ -69,15 +77,26 @@ const CodeScanner = () => {
               Scanned Code:
             </Typography>
             <Typography sx={styles.scannedCode}>{scannedCode}</Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={restartScanning}
-              startIcon={<RestartIcon />}
-              size="small"
-            >
-              Scan Another Code
-            </Button>
+            <Box display="flex" justifyContent="space-around">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={restartScanning}
+                startIcon={<RestartIcon />}
+                size="small"
+              >
+                Scan Another Code
+              </Button>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleSubmit}
+                startIcon={<SignatureIcon />}
+                size="small"
+              >
+                Sign Code
+              </Button>
+            </Box>
           </Box>
         )}
 
