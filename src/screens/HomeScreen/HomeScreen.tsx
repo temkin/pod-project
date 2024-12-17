@@ -14,6 +14,10 @@ const HomeScreen = () => {
     navigate(ROUTES.SCAN);
   };
 
+  const handleHistoryClick = () => {
+    navigate(ROUTES.SIGNED_CODES_HISTORY);
+  };
+
   return (
     <Container maxWidth="sm" sx={styles.container}>
       <Grid container spacing={2} sx={styles.gridContainer}>
@@ -57,6 +61,7 @@ const HomeScreen = () => {
 
         <Grid size={12}>
           <Button
+            onClick={handleHistoryClick}
             variant="contained"
             fullWidth
             startIcon={<HistoryIcon sx={styles.icon} />}
