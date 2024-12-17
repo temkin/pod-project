@@ -4,3 +4,8 @@ export type SignedCode = {
   timestamp: string;
   signature: string;
 };
+
+export type SignedCodesState = {
+  items: SignedCode[];
+  error: string | null;
+};

@@ -3,14 +3,20 @@ import { useNavigate, useParams } from "react-router";
 import Barcode from "react-barcode";
 import { ROUTES } from "../../app";
 import { SignatureCanvas } from "../../components";
+import { useAppDispatch, createSignedCode, addSignedCode } from "../../store";
 import styles from "./styles";
 
 const SignatureScreen = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const barcodeCode = params.code || "";
 
-  const handleSaveSignature = () => {
+  const handleSaveSignature = (signature: string) => {
+    const signedCode = createSignedCode(barcodeCode, signature);
+    dispatch(addSignedCode(signedCode));
+
     navigate(ROUTES.HOME);
   };
 
