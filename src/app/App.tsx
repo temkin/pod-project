@@ -1,4 +1,5 @@
 import { BrowserRouter } from "react-router";
+import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import Root from "./Root";
 import { Provider } from "react-redux";
 import store from "../store";
@@ -9,9 +10,11 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <BrowserRouter basename={basename}>
-        <Root />
-      </BrowserRouter>
+      <NotificationsProvider>
+        <BrowserRouter basename={basename}>
+          <Root />
+        </BrowserRouter>
+      </NotificationsProvider>
     </Provider>
   );
 };

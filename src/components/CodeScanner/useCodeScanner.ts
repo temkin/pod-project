@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BrowserMultiFormatReader } from "@zxing/library";
+import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/library";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
 export const useCodeScanner = (
@@ -31,12 +31,16 @@ export const useCodeScanner = (
           videoRef.current,
           (result, err) => {
             if (result) {
-              setScannedCode(result.getText());
-              options?.onScan?.({
-                code: result.getText(),
-                raw: result,
-                timestamp: Date.now(),
-              });
+              if (result.getBarcodeFormat() === BarcodeFormat.CODE_128) {
+                setScannedCode(result.getText());
+                options?.onScan?.({
+                  code: result.getText(),
+                  raw: result,
+                  timestamp: Date.now(),
+                });
+              } else {
+                setError(new Error(`Invalid code format`));
+              }
 
               new Audio("/beep.mp3").play().catch(() => {});
             }
