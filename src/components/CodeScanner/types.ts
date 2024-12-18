@@ -15,7 +15,6 @@ export type ScanResult = {
 export type UseCodeScannerOptions = {
   onScan?: (result: ScanResult) => void;
   onError?: (error: Error) => void;
-  debugMode?: boolean;
 };
 
 export type UseCodeScannerReturn = {
@@ -23,7 +22,5 @@ export type UseCodeScannerReturn = {
   scannedCode: string;
   error: Error | null;
   isScanning: boolean;
-  debug: boolean;
   restartScanning: () => void;
-  toggleDebug: () => void;
 };
