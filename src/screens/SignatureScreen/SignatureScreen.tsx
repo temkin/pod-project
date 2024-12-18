@@ -1,8 +1,8 @@
-import { Container, Typography, Grid2 as Grid, Paper } from "@mui/material";
+import { Typography, Grid2 as Grid, Paper } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import Barcode from "react-barcode";
 import { ROUTES } from "../../app";
-import { SignatureCanvas } from "../../components";
+import { Layout, SignatureCanvas } from "../../components";
 import { useAppDispatch, createSignedCode, addSignedCode } from "../../store";
 import styles from "./styles";
 
@@ -21,7 +21,7 @@ const SignatureScreen = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={styles.container}>
+    <Layout>
       <Grid container spacing={2} sx={styles.gridContainer}>
         <Grid size={12}>
           <Typography variant="h5" component="h1" mb={0} sx={styles.title}>
@@ -47,7 +47,7 @@ const SignatureScreen = () => {
           <SignatureCanvas onSave={handleSaveSignature} />
         </Grid>
       </Grid>
-    </Container>
+    </Layout>
   );
 };
 

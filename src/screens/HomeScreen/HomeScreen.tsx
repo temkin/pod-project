@@ -1,10 +1,11 @@
-import { Button, Container, Grid2 as Grid, Typography } from "@mui/material";
+import { Button, Grid2 as Grid, Typography } from "@mui/material";
 import {
   CropFreeOutlined as ScanIcon,
   History as HistoryIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../app";
+import { Layout } from "../../components";
 import styles from "./styles";
 
 const HomeScreen = () => {
@@ -19,7 +20,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={styles.container}>
+    <Layout showBackButton={false}>
       <Grid container spacing={2} sx={styles.gridContainer}>
         <Grid size={12}>
           <Typography
@@ -78,7 +79,7 @@ const HomeScreen = () => {
           </Button>
         </Grid>
       </Grid>
-    </Container>
+    </Layout>
   );
 };
 

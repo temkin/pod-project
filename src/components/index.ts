@@ -2,3 +2,5 @@ export { default as CodeScanner } from "./CodeScanner";
 export { default as ScanningInstructions } from "./ScanningInstructions";
 export { default as SignatureCanvas } from "./SignatureCanvas";
 export { default as SignedCodeHistoryItem } from "./SignedCodeHistoryItem";
+export { default as BackButton } from "./BackButton";
+export { default as Layout } from "./Layout";

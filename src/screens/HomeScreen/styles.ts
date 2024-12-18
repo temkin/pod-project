@@ -1,10 +1,4 @@
 const styles = {
-  container: {
-    height: "100svh",
-    bgcolor: "#f5f5f5",
-    display: "flex",
-    p: 2,
-  },
   gridContainer: {
     maxHeight: 400,
   },
@@ -17,7 +11,7 @@ const styles = {
   },
   icon: {
     transform: "scale(1.5)",
-  }
+  },
 };
 
 export default styles;
