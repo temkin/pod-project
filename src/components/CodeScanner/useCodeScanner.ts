@@ -24,7 +24,15 @@ export const useCodeScanner = (
           throw new Error("No video input devices found");
         }
 
-        const selectedDeviceId = videoInputDevices[0].deviceId;
+        const backCamera = videoInputDevices.find(
+          (device) =>
+            device.label.toLowerCase().includes("back") ||
+            device.label.toLowerCase().includes("environment")
+        );
+
+        const selectedDeviceId = backCamera
+          ? backCamera.deviceId
+          : videoInputDevices[0].deviceId;
 
         await codeReader.decodeFromVideoDevice(
           selectedDeviceId,
