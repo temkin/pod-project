@@ -7,10 +7,8 @@ import {
 } from "@mui/material";
 import {
   RestartAlt as RestartIcon,
-  BugReport as DebugIcon,
   CreateOutlined as SignatureIcon,
 } from "@mui/icons-material";
-import { MODES } from "../../env";
 import useCodeScanner from "./useCodeScanner";
 import styles from "./styles";
 import { CodeScannerProps } from "./types";
@@ -20,19 +18,11 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
   onSubmit,
   onError,
 }) => {
-  const {
-    videoRef,
-    scannedCode,
-    error,
-    isScanning,
-    debug,
-    restartScanning,
-    toggleDebug,
-  } = useCodeScanner({
-    onScan,
-    onError,
-    debugMode: import.meta.env.MODE === MODES.DEV,
-  });
+  const { videoRef, scannedCode, error, isScanning, restartScanning } =
+    useCodeScanner({
+      onScan,
+      onError,
+    });
 
   const handleSubmit = () => {
     if (scannedCode) {
@@ -46,11 +36,12 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
         <Box sx={styles.videoContainer}>
           <video
             ref={videoRef}
-            style={{ ...styles.video, ...(isScanning && styles.scanningVideo) }}
+            style={styles.video}
             playsInline
             muted
             autoPlay
           />
+
           {isScanning && <Box sx={styles.scannerOverlay} />}
         </Box>
 
@@ -108,48 +99,12 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
             mt={2}
           >
             <CircularProgress size={20} sx={styles.loader} />
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" ml={1}>
               Initializing camera...
             </Typography>
           </Box>
         )}
       </Paper>
-
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<DebugIcon />}
-          onClick={toggleDebug}
-        >
-          {debug ? "Hide Debug" : "Show Debug"}
-        </Button>
-      </Box>
-
-      {debug && (
-        <Paper sx={styles.debugContainer}>
-          <Typography variant="subtitle2" gutterBottom>
-            Debug Information:
-          </Typography>
-          <Box component="ul" m={1} pl={2}>
-            <li>
-              <Typography variant="body2">
-                Video Stream: {isScanning ? "Active" : "Inactive"}
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                Error: {error?.message || "None"}
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                Last Code: {scannedCode || "None"}
-              </Typography>
-            </li>
-          </Box>
-        </Paper>
-      )}
     </Box>
   );
 };

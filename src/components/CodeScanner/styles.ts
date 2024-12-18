@@ -17,11 +17,7 @@ const styles = {
   video: {
     width: "100%",
     height: "100%",
-    display: "none",
     objectFit: "cover" as const,
-  },
-  scanningVideo: {
-    display: "block",
   },
   scannerOverlay: {
     position: "absolute",

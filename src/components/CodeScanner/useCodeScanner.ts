@@ -1,156 +1,83 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/library";
-import {
-  ScanResult,
-  UseCodeScannerOptions,
-  UseCodeScannerReturn,
-} from "./types";
+import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
 export const useCodeScanner = (
   options: UseCodeScannerOptions = {}
 ): UseCodeScannerReturn => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null);
-  const isInitializedRef = useRef(false);
-
-  const [scannedCode, setScannedCode] = useState<string>("");
+  const videoRef = useRef(null);
+  const [scannedCode, setScannedCode] = useState("");
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(false);
-  const [debug, setDebug] = useState(options.debugMode || false);
 
-  const stopScanning = useCallback(() => {
-    if (codeReaderRef.current) {
+  useEffect(() => {
+    const codeReader = new BrowserMultiFormatReader();
+
+    const startScanning = async () => {
       try {
-        codeReaderRef.current.reset();
-        if (videoRef.current) {
-          const stream = videoRef.current.srcObject as MediaStream;
-          if (stream) {
-            stream.getTracks().forEach((track) => track.stop());
-          }
+        setIsScanning(true);
+        setError(null);
 
-          videoRef.current.srcObject = null;
+        const videoInputDevices = await codeReader.listVideoInputDevices();
+
+        if (videoInputDevices.length === 0) {
+          throw new Error("No video input devices found");
         }
-      } catch (e) {
-        console.error("Error stopping scanner:", e);
-      }
-    }
-    setIsScanning(false);
-    isInitializedRef.current = false;
-  }, []);
 
-  const initializeScanner = useCallback(async () => {
-    if (isInitializedRef.current || !videoRef.current) {
-      return;
-    }
+        const selectedDeviceId = videoInputDevices[0].deviceId;
 
-    try {
-      stopScanning();
-
-      codeReaderRef.current = new BrowserMultiFormatReader();
-
-      const videoInputDevices =
-        await codeReaderRef.current.listVideoInputDevices();
-
-      if (!videoInputDevices?.length) {
-        throw new Error("No video input devices found");
-      }
-
-      const selectedDeviceId = videoInputDevices[0].deviceId;
-
-      setIsScanning(true);
-      setError(null);
-
-      await new Promise<void>((resolve) => {
-        if (!codeReaderRef.current) return;
-
-        codeReaderRef.current.decodeFromVideoDevice(
+        await codeReader.decodeFromVideoDevice(
           selectedDeviceId,
-          videoRef.current!,
+          videoRef.current,
           (result, err) => {
             if (result) {
-              const scanResult: ScanResult = {
+              setScannedCode(result.getText());
+              options?.onScan?.({
                 code: result.getText(),
                 raw: result,
                 timestamp: Date.now(),
-              };
-              setScannedCode(scanResult.code);
-              options.onScan?.(scanResult);
-            }
+              });
 
+              new Audio("/beep.mp3").play().catch(() => {});
+            }
             if (err && !(err instanceof TypeError)) {
               if (!err.message.includes("No MultiFormat Readers")) {
-                const error = new Error(err.message || "Scanning error");
-                setError(error);
-                options.onError?.(error);
+                setError(err);
+                options?.onError?.(err);
               }
             }
-            resolve();
           }
         );
-      });
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err);
+        } else {
+          setError(new Error("An unknown error occurred"));
+        }
 
-      isInitializedRef.current = true;
-    } catch (err) {
-      const error =
-        err instanceof Error ? err : new Error("Scanner initialization failed");
+        setIsScanning(false);
+      }
+    };
 
-      setError(error);
-      options.onError?.(error);
+    startScanning();
+
+    return () => {
       setIsScanning(false);
-      isInitializedRef.current = false;
-    }
-  }, [options, stopScanning]);
+      codeReader.reset();
+    };
+  }, []);
 
-  const restartScanning = useCallback(() => {
-    stopScanning();
+  const restartScanning = () => {
     setScannedCode("");
     setError(null);
-
-    setTimeout(() => {
-      void initializeScanner();
-    }, 300);
-  }, [stopScanning, initializeScanner]);
-
-  const toggleDebug = useCallback(() => {
-    setDebug((prev) => !prev);
-  }, []);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.setAttribute("playsinline", "true");
-      videoRef.current.setAttribute("autoplay", "true");
-      videoRef.current.setAttribute("muted", "true");
-    }
-  }, []);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-
-    if (videoElement) {
-      const timer = setTimeout(() => {
-        initializeScanner();
-      }, 100);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [initializeScanner]);
-
-  useEffect(() => {
-    return () => {
-      stopScanning();
-    };
-  }, [stopScanning]);
+  };
 
   return {
     videoRef,
     scannedCode,
     error,
     isScanning,
-    debug,
     restartScanning,
-    toggleDebug,
   };
 };
 
