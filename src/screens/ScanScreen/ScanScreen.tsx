@@ -1,10 +1,9 @@
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Grid2 as Grid } from "@mui/material";
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../app";
-import { CodeScanner, ScanningInstructions } from "../../components";
+import { CodeScanner, Layout, ScanningInstructions } from "../../components";
 import { ScanResult } from "../../components/types";
-import styles from "./styles";
 
 const ScanScreen = () => {
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ const ScanScreen = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={styles.container}>
+    <Layout>
       <Grid container spacing={2}>
         <Grid size={12}>
           <Typography variant="h5" component="h1" fontWeight="bold">
@@ -51,7 +50,7 @@ const ScanScreen = () => {
           <ScanningInstructions />
         </Grid>
       </Grid>
-    </Container>
+    </Layout>
   );
 };
 

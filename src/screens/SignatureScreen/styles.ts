@@ -1,11 +1,4 @@
 const styles = {
-  container: {
-    height: "100%",
-    bgcolor: "#f5f5f5",
-    position: "fixed",
-    left: 0,
-    right: 0,
-  },
   gridContainer: {
     p: 2,
   },

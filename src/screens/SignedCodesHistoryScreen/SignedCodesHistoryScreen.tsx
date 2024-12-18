@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  Container,
-  Typography,
-  List,
-  Paper,
-  Divider,
-  Box,
-} from "@mui/material";
+import { Typography, List, Paper, Divider, Box } from "@mui/material";
 import { QrCode as QrCodeIcon } from "@mui/icons-material";
-import { SignedCodeHistoryItem } from "../../components";
+import { Layout, SignedCodeHistoryItem } from "../../components";
 import styles from "./styles";
 import { useAppSelector, selectAllSignedCodes } from "../../store";
 
@@ -16,7 +9,7 @@ const SignedCodesHistoryScreen = () => {
   const signedCodes = useAppSelector(selectAllSignedCodes);
 
   return (
-    <Container maxWidth="sm" sx={styles.container}>
+    <Layout>
       <Box sx={styles.header}>
         <Typography variant="h5" component="h1" sx={styles.title}>
           Signed Codes History 📝
@@ -48,7 +41,7 @@ const SignedCodesHistoryScreen = () => {
           </Box>
         )}
       </Paper>
-    </Container>
+    </Layout>
   );
 };
 

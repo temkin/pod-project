@@ -1,13 +1,4 @@
 const styles = {
-  container: {
-    py: 3,
-    height: "100%",
-    bgcolor: "#f5f5f5",
-    position: "fixed",
-    left: 0,
-    right: 0,
-    overflowY: "auto",
-  },
   header: {
     mb: 3,
   },
