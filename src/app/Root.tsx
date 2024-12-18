@@ -10,7 +10,7 @@ import ROUTES from "./routes";
 const Root = () => {
   return (
     <Routes>
-      <Route index path={ROUTES.HOME} element={<HomeScreen />} />
+      <Route path={ROUTES.HOME} element={<HomeScreen />} />
       <Route path={ROUTES.SCAN} element={<ScanScreen />} />
       <Route
         path={ROUTES.SIGNATURE_CODE(":code")}

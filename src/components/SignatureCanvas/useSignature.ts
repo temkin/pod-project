@@ -1,5 +1,10 @@
+import { useNotifications } from "@toolpad/core";
 import { useRef, useState, useCallback } from "react";
 import SignatureCanvas from "react-signature-pad-wrapper";
+import {
+  NOTIFICATIONS_DEFAULT_TIMEOUT,
+  NOTIFICATIONS_SEVERITIES,
+} from "../../lib";
 
 export interface UseSignatureOptions {
   onSave?: (signature: string) => void;
@@ -23,6 +28,7 @@ export const useSignature = (
   const [signature, setSignature] = useState<string>("");
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState<boolean>(true);
+  const notifications = useNotifications();
 
   const saveSignature = useCallback(() => {
     try {
@@ -39,6 +45,11 @@ export const useSignature = (
       setIsScanning(false);
       setError(null);
       options.onSave?.(signatureData);
+
+      notifications.show("Signature saved", {
+        severity: NOTIFICATIONS_SEVERITIES.SUCCESS,
+        autoHideDuration: NOTIFICATIONS_DEFAULT_TIMEOUT,
+      });
     } catch (err) {
       const error =
         err instanceof Error ? err : new Error("Unknown error occurred");
