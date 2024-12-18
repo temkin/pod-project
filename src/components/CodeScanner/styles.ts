@@ -12,7 +12,7 @@ const styles = {
     aspectRatio: "4/3",
     borderRadius: 1,
     overflow: "hidden",
-    bgcolor: "#000",
+    bgcolor: "#fff",
   },
   video: {
     width: "100%",
