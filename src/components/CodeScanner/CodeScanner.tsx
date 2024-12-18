@@ -41,7 +41,6 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
             muted
             autoPlay
           />
-
           {isScanning && <Box sx={styles.scannerOverlay} />}
         </Box>
 
