@@ -30,6 +30,10 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
     }
   };
 
+  const handleVideoPlay = () => {
+    restartScanning();
+  };
+
   return (
     <Box>
       <Paper elevation={3} sx={styles.container}>
@@ -40,6 +44,7 @@ const CodeScanner: React.FC<CodeScannerProps> = ({
             playsInline
             muted
             autoPlay
+            onPlay={handleVideoPlay}
           />
           {isScanning && <Box sx={styles.scannerOverlay} />}
         </Box>

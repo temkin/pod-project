@@ -1,100 +1,55 @@
-import { useEffect, useRef, useState } from "react";
-import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/library";
+import { useState } from "react";
+import { BarcodeFormat } from "@zxing/library";
+import { useZxing, Result } from "react-zxing";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
 ): UseCodeScannerReturn => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const codeReader = useRef<BrowserMultiFormatReader | null>(null);
   const [scannedCode, setScannedCode] = useState("");
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(false);
 
-  const cleanup = () => {
-    try {
-      codeReader.current?.reset();
-      setIsScanning(false);
-    } catch (e) {
-      console.error("Cleanup error:", e);
-    }
-  };
-
-  useEffect(() => {
-    codeReader.current = new BrowserMultiFormatReader();
-
-    const startScanning = async () => {
-      try {
-        setIsScanning(true);
-        setError(null);
-
-        const videoInputDevices =
-          await codeReader.current!.listVideoInputDevices();
-
-        if (videoInputDevices.length === 0) {
-          throw new Error("No video input devices found");
-        }
-
-        const backCamera = videoInputDevices.find(
-          (device) =>
-            device.label.toLowerCase().includes("back") ||
-            device.label.toLowerCase().includes("environment")
-        );
-
-        const selectedDeviceId = backCamera
-          ? backCamera.deviceId
-          : videoInputDevices[0].deviceId;
-
-        if (!videoRef.current) return;
-
-        await codeReader.current!.decodeFromVideoDevice(
-          selectedDeviceId,
-          videoRef.current,
-          (result, err) => {
-            if (result) {
-              if (result.getBarcodeFormat() === BarcodeFormat.CODE_128) {
-                setScannedCode(result.getText());
-                options?.onScan?.({
-                  code: result.getText(),
-                  raw: result,
-                  timestamp: Date.now(),
-                });
-              } else {
-                setError(new Error(`Invalid code format`));
-              }
-
-              new Audio("/beep.mp3").play().catch(() => {});
-            }
-            if (err && !(err instanceof TypeError)) {
-              if (!err.message.includes("No MultiFormat Readers")) {
-                setError(err);
-                options?.onError?.(err);
-              }
-            }
-          }
-        );
-      } catch (err) {
-        console.error("Scanner error:", err);
-        if (err instanceof Error) {
-          setError(err);
-        } else {
-          setError(new Error("An unknown error occurred"));
-        }
+  const { ref: videoRef } = useZxing({
+    onDecodeResult: (result: Result) => {
+      if (result.getBarcodeFormat() === BarcodeFormat.CODE_128) {
+        const code = result.getText();
+        setScannedCode(code);
         setIsScanning(false);
+        options?.onScan?.({
+          code,
+          raw: result,
+          timestamp: Date.now(),
+        });
+
+        return;
       }
-    };
 
-    startScanning();
+      const unknownFormatError = new Error("Incorrect code format");
+      setError(unknownFormatError);
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        setError(err);
+        options?.onError?.(err);
+        return;
+      }
 
-    return () => {
-      cleanup();
-    };
-  }, []);
+      const unknownError = new Error("An unknown error occurred");
+      setError(unknownError);
+      options?.onError?.(unknownError);
+    },
+    constraints: {
+      video: {
+        facingMode: "environment",
+      },
+    },
+  });
 
   const restartScanning = () => {
-    cleanup();
     setScannedCode("");
     setError(null);
+    setIsScanning(true);
   };
 
   return {
