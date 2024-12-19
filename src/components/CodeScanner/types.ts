@@ -1,4 +1,4 @@
-import { Result } from "@zxing/library";
+import { Result } from "react-zxing";
 
 export type CodeScannerProps = {
   onScan: (result: ScanResult) => void;
