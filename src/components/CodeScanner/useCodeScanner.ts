@@ -42,6 +42,10 @@ const useCodeScanner = (
     constraints: {
       video: {
         facingMode: "environment",
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        aspectRatio: { ideal: 1.7777777778 },
+        frameRate: { ideal: 30 },
       },
     },
   });
