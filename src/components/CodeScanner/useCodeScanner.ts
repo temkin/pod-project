@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { BarcodeFormat } from "@zxing/library";
 import { useZxing, Result } from "react-zxing";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
@@ -46,11 +46,11 @@ const useCodeScanner = (
     },
   });
 
-  const restartScanning = useCallback(() => {
+  const restartScanning = () => {
     setScannedCode("");
     setError(null);
     setIsScanning(true);
-  }, []);
+  };
 
   return {
     videoRef,
