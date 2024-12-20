@@ -1,41 +1,42 @@
 const styles = {
+  container: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
   signatureBox: {
-    mb: 2,
-    p: 2,
-    bgcolor: "#fff",
+    flex: 1,
+    position: 'relative',
+    backgroundColor: "#fff",
     borderRadius: 4,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#D6D6D6",
+    border: "1px solid #D6D6D6",
+    overflow: 'hidden',
+    minHeight: 100,
   },
   canvas: {
-    width: "100%",
-    margin: "0 auto",
-    display: "block",
-  },
-  capturedSignatureContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    p: 2,
-  },
-  capturedImage: {
-    maxWidth: "100%",
-    objectFit: "contain" as const,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    touchAction: 'none',
   },
   alert: {
-    mb: 2,
+    marginTop: 2,
+    marginBottom: 2,
   },
   buttonsContainer: {
     display: "flex",
     gap: 2,
-    justifyContent: "center",
+    marginTop: 2,
   },
-  capturedSection: {
-    textAlign: "center",
+  clearButton: {
+    width: "30%", 
+    borderRadius: 3, 
+    py: 2,
   },
-  capturedTitle: {
-    mb: 2,
+  saveButton: {
+    width: "70%", 
+    borderRadius: 3, 
+    py: 2,
   },
 };
 

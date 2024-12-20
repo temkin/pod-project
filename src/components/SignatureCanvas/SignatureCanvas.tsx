@@ -13,16 +13,12 @@ interface SignatureCanvasProps {
   onSave?: (signature: string) => void;
   onError?: (error: Error) => void;
   onClear?: () => void;
-  width?: number;
-  height?: number;
 }
 
 const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   onSave,
   onError,
   onClear,
-  width = 500,
-  height = 200,
 }) => {
   const { sigPadRef, error, saveSignature, clearSignature } = useSignature({
     onSave,
@@ -31,16 +27,12 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   });
 
   return (
-    <Box>
+    <Box sx={styles.container}>
       <Box sx={styles.signatureBox}>
         <SignatureCanvasBase
           ref={sigPadRef}
           canvasProps={{
-            style: {
-              ...styles.canvas,
-              height: `${height}px`,
-              maxWidth: `${width}px`,
-            },
+            style: styles.canvas,
           }}
         />
       </Box>
@@ -70,7 +62,7 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
           color="primary"
           startIcon={<ClearIcon />}
           onClick={clearSignature}
-          sx={{ width: "30%", borderRadius: 3, py: 2 }}
+          sx={styles.clearButton}
         >
           Clear
         </Button>
@@ -79,7 +71,7 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
           color="primary"
           startIcon={<DoneIcon />}
           onClick={saveSignature}
-          sx={{ width: "70%", borderRadius: 3, py: 2 }}
+          sx={styles.saveButton}
         >
           Save Signature
         </Button>
