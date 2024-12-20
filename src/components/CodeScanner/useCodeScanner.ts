@@ -27,6 +27,7 @@ const useCodeScanner = (
 
       const unknownFormatError = new Error("Incorrect code format");
       setError(unknownFormatError);
+      options?.onError?.(unknownFormatError);
     },
     onError: (err) => {
       if (err instanceof Error) {
