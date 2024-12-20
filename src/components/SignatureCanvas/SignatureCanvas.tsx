@@ -1,10 +1,10 @@
 import React from "react";
 import SignatureCanvasBase from "react-signature-pad-wrapper";
-import { Box, Button, Paper, Alert } from "@mui/material";
+import { Box, Button, Alert } from "@mui/material";
 import {
-  Save as SaveIcon,
   Clear as ClearIcon,
   RestartAlt as RestartIcon,
+  Done as DoneIcon,
 } from "@mui/icons-material";
 import { useSignature } from "./useSignature";
 import styles from "./styles";
@@ -31,7 +31,7 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   });
 
   return (
-    <Paper elevation={3} sx={styles.container}>
+    <Box>
       <Box sx={styles.signatureBox}>
         <SignatureCanvasBase
           ref={sigPadRef}
@@ -67,22 +67,24 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
       <Box sx={styles.buttonsContainer}>
         <Button
           variant="outlined"
-          color="error"
+          color="primary"
           startIcon={<ClearIcon />}
           onClick={clearSignature}
+          sx={{ width: "30%", borderRadius: 3, py: 2 }}
         >
           Clear
         </Button>
         <Button
           variant="contained"
           color="primary"
-          startIcon={<SaveIcon />}
+          startIcon={<DoneIcon />}
           onClick={saveSignature}
+          sx={{ width: "70%", borderRadius: 3, py: 2 }}
         >
           Save Signature
         </Button>
       </Box>
-    </Paper>
+    </Box>
   );
 };
 

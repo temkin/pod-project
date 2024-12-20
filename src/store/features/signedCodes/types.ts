@@ -3,6 +3,9 @@ export type SignedCode = {
   code: string;
   timestamp: string;
   signature: string;
+  user: {
+    name: string;
+  };
 };
 
 export type SignedCodesState = {

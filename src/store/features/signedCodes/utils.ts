@@ -8,4 +8,7 @@ export const createSignedCode = (
   code,
   signature,
   timestamp: new Date().toISOString(),
+  user: {
+    name: "User",
+  },
 });

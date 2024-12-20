@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
 import {
-  HomeScreen,
   ScanScreen,
   SignatureScreen,
   SignedCodesHistoryScreen,
@@ -10,7 +9,6 @@ import ROUTES from "./routes";
 const Root = () => {
   return (
     <Routes>
-      <Route path={ROUTES.HOME} element={<HomeScreen />} />
       <Route path={ROUTES.SCAN} element={<ScanScreen />} />
       <Route
         path={ROUTES.SIGNATURE_CODE(":code")}
@@ -20,7 +18,7 @@ const Root = () => {
         path={ROUTES.SIGNED_CODES_HISTORY}
         element={<SignedCodesHistoryScreen />}
       />
-      <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
+      <Route path="*" element={<Navigate to={ROUTES.SCAN} />} />
     </Routes>
   );
 };

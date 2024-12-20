@@ -1,15 +1,10 @@
 const styles = {
-  container: {
-    p: 2,
-    bgcolor: "#fff",
-  },
-  list: { listStyle: "none" },
+  list: { listStyle: "none", display: "flex", textAlign: "center", gap: 2 },
   listItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: 2,
-    mb: 1,
-    "&:last-child": { mb: 0 },
+    bgcolor: "rgba(29, 29, 29, 0.8)",
+    p: 1.5,
+    borderRadius: 2,
+    maxWidth: 102,
   },
 };
 

@@ -2,23 +2,19 @@ import { useState } from "react";
 import Barcode from "react-barcode";
 import {
   ListItem,
+  Paper,
   Box,
-  Tooltip,
-  IconButton,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
   Typography,
-  Chip,
+  IconButton,
   Collapse,
-  Divider,
+  Tooltip,
 } from "@mui/material";
 import {
   QrCode as QrCodeIcon,
-  AccessTime as TimeIcon,
   ContentCopy as CopyIcon,
-  Done as DoneIcon,
-  ExpandMore as ExpandMoreIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  CalendarToday as CalendarTodayIcon,
+  AccessTime as AccessTimeIcon,
 } from "@mui/icons-material";
 import { useNotifications } from "@toolpad/core";
 import {
@@ -26,7 +22,6 @@ import {
   NOTIFICATIONS_SEVERITIES,
 } from "../../lib";
 import { SignedCode } from "../../store/types";
-import styles from "./styles";
 
 const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
   const [expanded, setExpanded] = useState(false);
@@ -40,114 +35,171 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
     });
   };
 
-  const signedDateFormatted = new Date(item.timestamp).toLocaleString();
+  const date = new Date(item.timestamp).toLocaleDateString();
+  const time = new Date(item.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   return (
-    <>
-      <ListItem
-        sx={styles.listItem}
-        secondaryAction={
-          <Box display="flex" gap={1}>
-            <Tooltip title="Copy code">
-              <IconButton
-                edge="end"
-                sx={styles.copyButton}
-                onClick={() => handleCopyCode(item.code)}
-              >
-                <CopyIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={expanded ? "Hide barcode" : "Show barcode"}>
-              <IconButton
-                onClick={() => setExpanded(!expanded)}
-                sx={{
-                  ...styles.expandButton,
-                  ...(expanded && { "&.expanded": true }),
-                }}
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        }
+    <ListItem sx={{ p: 0, mb: 2 }}>
+      <Paper
+        elevation={0}
+        sx={{
+          width: "100%",
+          borderRadius: "20px",
+          p: 2,
+        }}
       >
-        <ListItemAvatar>
-          <Avatar sx={styles.codeAvatar}>
-            <QrCodeIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <Typography component="div" variant="body1">
-              <Box component="span" sx={styles.codeText}>
-                {item.code}
-              </Box>
-              <Chip
-                size="small"
-                icon={<DoneIcon />}
-                label="Signed"
-                sx={{ ml: 1, ...styles.chip }}
-              />
-            </Typography>
-          }
-          secondary={
-            <Typography component="div" variant="body2">
-              <Typography
-                component="span"
-                variant="body2"
-                sx={styles.timestamp}
-                display="flex"
-                alignItems="center"
-                gap={0.5}
-              >
-                <TimeIcon fontSize="small" />
-                {signedDateFormatted}
-              </Typography>
-              <Typography
-                component="span"
-                variant="body2"
-                color="text.secondary"
-                display="block"
-                mt={0.5}
-              >
-                Signed by: User
-              </Typography>
-            </Typography>
-          }
-        />
-      </ListItem>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box sx={styles.expandedContent}>
-          <Box sx={styles.barcodeContainer}>
-            <Typography variant="subtitle2" color="text.secondary" mb={1}>
-              Barcode
-            </Typography>
-            <Barcode
-              value={item.code}
-              width={1.5}
-              height={50}
-              fontSize={14}
-              margin={10}
-              background="#ffffff"
-            />
+        <Box display="flex" alignItems="flex-start" gap={2}>
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              bgcolor: "#2EE18E",
+              borderRadius: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <QrCodeIcon sx={{ color: "#1D1D1D" }} />
           </Box>
 
-          <Divider sx={{ my: 2 }} />
-
-          <Box sx={styles.signatureContainer}>
-            <Typography variant="subtitle2" color="text.secondary" mb={1}>
-              Signature
+          <Box flex={1}>
+            <Typography
+              fontFamily="Poppins"
+              fontSize={20}
+              fontWeight={500}
+              variant="h6"
+              color="#1D1D1D"
+            >
+              {item.code}
             </Typography>
-            <Box
-              component="img"
-              src={item.signature}
-              alt="Signature"
-              sx={styles.signatureImage}
-            />
+          </Box>
+
+          <Tooltip title="Copy code">
+            <IconButton
+              onClick={() => handleCopyCode(item.code)}
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: "10px",
+              }}
+            >
+              <CopyIcon sx={{ color: "#1D1D1D" }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+          <Typography
+            fontFamily="Poppins"
+            fontSize={14}
+            fontWeight={400}
+            sx={{ fontSize: 14 }}
+          >
+            {item.user.name}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              bgcolor: "rgba(46, 225, 142, 0.2)",
+              borderRadius: "4px",
+
+              width: "fit-content",
+            }}
+          >
+            <Typography
+              fontFamily="Poppins"
+              fontWeight={500}
+              fontSize={14}
+              color="#2EE18E"
+              textTransform="uppercase"
+              px={1}
+              borderRadius={4}
+            >
+              Signed
+            </Typography>
           </Box>
         </Box>
-      </Collapse>
-    </>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            color: "#989393",
+          }}
+        >
+          <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <CalendarTodayIcon fontSize="small" />
+              <Typography fontSize={14}>{date}</Typography>
+            </Box>
+            <Box
+              sx={{
+                width: 4,
+                height: 4,
+                borderRadius: "50%",
+                bgcolor: "#989393",
+              }}
+            />
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <AccessTimeIcon fontSize="small" />
+              <Typography fontSize={14}>{time}</Typography>
+            </Box>
+          </Box>
+
+          <IconButton
+            onClick={() => setExpanded(!expanded)}
+            sx={{
+              width: 40,
+              height: 40,
+              bgcolor: "#F1F2F6",
+              borderRadius: "10px",
+              transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.3s",
+            }}
+          >
+            <KeyboardArrowDownIcon />
+          </IconButton>
+        </Box>
+
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Box sx={{ mt: 2 }}>
+            <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+              <Barcode
+                value={item.code}
+                width={1.5}
+                height={50}
+                fontSize={14}
+                margin={10}
+                background="#ffffff"
+              />
+            </Box>
+
+            <Box>
+              <Box
+                component="img"
+                src={item.signature}
+                alt="Signature"
+                sx={{
+                  width: "100%",
+                  maxHeight: 100,
+                  objectFit: "contain",
+                  border: '1px solid #D6D6D6',
+                  borderRadius: 5,
+                }}
+              />
+            </Box>
+          </Box>
+        </Collapse>
+      </Paper>
+    </ListItem>
   );
 };
 
