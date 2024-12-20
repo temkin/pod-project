@@ -31,7 +31,7 @@ const SignatureScreen = () => {
   return (
     <Layout name="Sign code">
       <Box sx={styles.scrollableContainer}>
-        <Grid container spacing={1.5} sx={styles.gridContainer}>
+        <Grid size={12} container spacing={1.5} sx={styles.gridContainer}>
           <Grid container size={12} rowSpacing={1.5}>
             <Grid
               size={12}
@@ -54,7 +54,7 @@ const SignatureScreen = () => {
                 Retry
               </Button>
             </Grid>
-            <Grid size={12} display="flex" justifyContent="center">
+            <Grid size={12} display="flex" justifyContent="center"  >
               <Box sx={styles.barcodeContainer}>
                 <Barcode
                   value={barcodeCode}
