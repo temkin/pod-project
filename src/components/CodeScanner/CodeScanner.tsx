@@ -23,7 +23,7 @@ const CodeScanner: React.FC<CodeScannerProps> = ({ onScan, onError }) => {
           py: 1,
           px: 1.5,
           borderRadius: 3,
-          top: "calc(50% - 153px - 60px)",
+          top: "calc(40% - 153px - 60px)",
           left: "50%",
           transform: "translateX(-50%)",
           width: "fit-content",
