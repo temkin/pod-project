@@ -45,11 +45,11 @@ export default defineConfig(({ mode }) => {
       port: 5173,
     };
 
-    config.base = "/";
+    config.base = "/scan";
   }
 
   if (mode === "production") {
-    config.base = "/pod-project/";
+    config.base = "/pod-project/scan";
   }
 
   return config;
