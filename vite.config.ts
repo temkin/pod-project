@@ -1,9 +1,18 @@
 import { defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import { resolve } from "path";
 
 export default defineConfig(({ mode }) => {
   const config: UserConfig = {
+    build: {
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, "index.html"),
+          404: resolve(__dirname, "public/404.html"),
+        },
+      },
+    },
     plugins: [
       react(),
       VitePWA({
