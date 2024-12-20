@@ -1,6 +1,9 @@
 const styles = {
   gridContainer: {
     p: 2,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "100%",
   },
   title: {
     fontWeight: "bold",
@@ -12,11 +15,15 @@ const styles = {
   barcodeContainer: {
     p: 2,
     mb: 2,
-    bgcolor: "white",
-    borderRadius: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    width: 220,
+    height: 220,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#D6D6D6",
   },
 };
 

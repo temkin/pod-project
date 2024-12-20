@@ -1,27 +1,28 @@
 import React from "react";
-import { Typography, List, Paper, Divider, Box } from "@mui/material";
-import { QrCode as QrCodeIcon } from "@mui/icons-material";
+import { Typography, List, Divider, Box, Fab } from "@mui/material";
+import {
+  QrCode as QrCodeIcon,
+  CropFreeOutlined as ScanIcon,
+} from "@mui/icons-material";
 import { Layout, SignedCodeHistoryItem } from "../../components";
 import styles from "./styles";
 import { useAppSelector, selectAllSignedCodes } from "../../store";
+import { useNavigate } from "react-router";
+import { ROUTES } from "../../app";
 
 const SignedCodesHistoryScreen = () => {
   const signedCodes = useAppSelector(selectAllSignedCodes);
+  const navigate = useNavigate();
+
+  const handleScannerClick = () => {
+    navigate(ROUTES.SCAN);
+  };
 
   return (
-    <Layout>
-      <Box sx={styles.header}>
-        <Typography variant="h5" component="h1" sx={styles.title}>
-          Signed Codes History 📝
-        </Typography>
-        <Typography variant="subtitle1" sx={styles.subtitle}>
-          View your recently signed barcodes
-        </Typography>
-      </Box>
-
-      <Paper sx={styles.listContainer} elevation={2}>
+    <Layout name="History">
+      <Box sx={styles.listContainer}>
         {signedCodes.length > 0 ? (
-          <List disablePadding>
+          <List>
             {signedCodes.map((item, index) => (
               <React.Fragment key={item.id}>
                 {index > 0 && <Divider />}
@@ -40,7 +41,19 @@ const SignedCodesHistoryScreen = () => {
             </Typography>
           </Box>
         )}
-      </Paper>
+      </Box>
+      <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
+        <Fab
+          onClick={handleScannerClick}
+          sx={{
+            borderRadius: 4,
+            boxShadow: "unset",
+            backgroundColor: "#2A61E1",
+          }}
+        >
+          <ScanIcon sx={{ color: "#FFFFFF" }} />
+        </Fab>
+      </Box>
     </Layout>
   );
 };

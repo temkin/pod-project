@@ -11,9 +11,9 @@ const styles = {
     fontWeight: "medium",
   },
   listContainer: {
-    bgcolor: "background.paper",
     borderRadius: 1,
     overflow: "hidden",
+    p: 2
   },
   listItem: {
     py: 2,
@@ -52,7 +52,6 @@ const styles = {
   barcodeContainer: {
     mt: 2,
     p: 2,
-    bgcolor: "#fff",
     borderRadius: 1,
     display: "flex",
     justifyContent: "center",

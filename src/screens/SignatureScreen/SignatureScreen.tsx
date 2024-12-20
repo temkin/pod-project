@@ -1,10 +1,14 @@
-import { Typography, Grid2 as Grid, Paper } from "@mui/material";
+import { Typography, Grid2 as Grid, Box, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import Barcode from "react-barcode";
 import { ROUTES } from "../../app";
 import { Layout, SignatureCanvas } from "../../components";
 import { useAppDispatch, createSignedCode, addSignedCode } from "../../store";
 import styles from "./styles";
+import {
+  QrCodeOutlined as QrCodeOutlinedIcon,
+  RefreshOutlined as RefreshOutlinedIcon,
+} from "@mui/icons-material";
 
 const SignatureScreen = () => {
   const params = useParams();
@@ -12,6 +16,10 @@ const SignatureScreen = () => {
   const dispatch = useAppDispatch();
 
   const barcodeCode = params.code || "";
+
+  const handleRetry = () => {
+    navigate(ROUTES.SCAN);
+  };
 
   const handleSaveSignature = (signature: string) => {
     const signedCode = createSignedCode(barcodeCode, signature);
@@ -21,26 +29,41 @@ const SignatureScreen = () => {
   };
 
   return (
-    <Layout>
-      <Grid container spacing={2} sx={styles.gridContainer}>
-        <Grid size={12}>
-          <Typography variant="h5" component="h1" mb={0} sx={styles.title}>
-            Signature ✒️
-          </Typography>
-          <Typography variant="h6" component="h2" mb={3} sx={styles.subtitle}>
-            Sign scanned barcode.
-          </Typography>
-        </Grid>
-
-        <Grid size={12}>
-          <Paper sx={styles.barcodeContainer}>
-            <Barcode
-              value={barcodeCode}
-              width={1.5}
-              height={50}
-              fontSize={14}
-            />
-          </Paper>
+    <Layout name="Sign code">
+      <Grid container spacing={1.5} sx={styles.gridContainer}>
+        <Grid container size={12} rowSpacing={1.5}>
+          <Grid
+            size={12}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            gap={0.5}
+          >
+            <QrCodeOutlinedIcon />
+            <Typography fontWeight={500} fontFamily="Poppins" fontSize={20}>
+              {barcodeCode}
+            </Typography>
+          </Grid>
+          <Grid size={12} display="flex" justifyContent="center">
+            <Button
+              onClick={handleRetry}
+              sx={{ textTransform: "none" }}
+              startIcon={<RefreshOutlinedIcon />}
+            >
+              Retry
+            </Button>
+          </Grid>
+          <Grid size={12} display="flex" justifyContent="center">
+            <Box sx={styles.barcodeContainer}>
+              <Barcode
+                value={barcodeCode}
+                width={1.5}
+                height={50}
+                fontSize={0}
+                background="transparent"
+              />
+            </Box>
+          </Grid>
         </Grid>
 
         <Grid size={12}>

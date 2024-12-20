@@ -1,9 +1,8 @@
 import { Result } from "react-zxing";
 
 export type CodeScannerProps = {
-  onScan: (result: ScanResult) => void;
-  onSubmit: (code: string) => void;
-  onError: (error: Error) => void;
+  onScan?: (result: ScanResult) => void;
+  onError?: (error: Error) => void;
 };
 
 export type ScanResult = {

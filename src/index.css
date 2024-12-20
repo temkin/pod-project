@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 @keyframes scan {
   0% {
     top: -2px;

@@ -1,22 +1,17 @@
 const styles = {
   container: {
     height: "100%",
-    bgcolor: "#f5f5f5",
+    width: "100%",
     position: "fixed",
     left: 0,
     right: 0,
     overflow: "auto",
-    pt: 2,
-    pb: 2,
+    p: 0,
+    bgcolor: "#F1F2F6",
   },
   content: {
     position: "relative",
-    mt: 6,
-  },
-  backButton: {
-    position: "absolute",
-    left: 16,
-    top: 16,
+    height: "calc(100% - 64px)",
   },
 } as const;
 
