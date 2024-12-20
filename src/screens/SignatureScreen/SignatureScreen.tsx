@@ -32,7 +32,7 @@ const SignatureScreen = () => {
       <Stack sx={styles.container}>
         <Box sx={styles.topSection}>
           <Stack spacing={1} sx={styles.contentStack}>
-            <Stack sx={styles.codeDisplay}>
+            <Stack direction="row" spacing={1} sx={styles.codeDisplay}>
               <QrCodeOutlinedIcon />
               <Typography sx={styles.codeText}>
                 {barcodeCode}
