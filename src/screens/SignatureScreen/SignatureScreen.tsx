@@ -24,7 +24,7 @@ const SignatureScreen = () => {
   const handleSaveSignature = (signature: string) => {
     const signedCode = createSignedCode(barcodeCode, signature);
     dispatch(addSignedCode(signedCode));
-    navigate(ROUTES.HOME);
+    navigate(ROUTES.SCAN);
   };
 
   return (
@@ -34,9 +34,7 @@ const SignatureScreen = () => {
           <Stack spacing={1} sx={styles.contentStack}>
             <Stack direction="row" spacing={1} sx={styles.codeDisplay}>
               <QrCodeOutlinedIcon />
-              <Typography sx={styles.codeText}>
-                {barcodeCode}
-              </Typography>
+              <Typography sx={styles.codeText}>{barcodeCode}</Typography>
             </Stack>
 
             <Button
