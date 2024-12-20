@@ -22,7 +22,7 @@ const listItems = [
 ];
 
 const ScanningInstructions = () => (
-  <Box component="ul" m={1} p={1} sx={styles.list}>
+  <Box component="ul" m={0} p={1} sx={styles.list}>
     {listItems.map((item, index) => (
       <Box component="li" key={index} sx={styles.listItem}>
         {item.icon}
