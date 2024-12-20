@@ -4,6 +4,8 @@ const styles = {
     flexDirection: "column",
     justifyContent: "space-between",
     height: "100%",
+    display: "flex",
+    minHeight: "min-content",
   },
   title: {
     fontWeight: "bold",
@@ -25,6 +27,16 @@ const styles = {
     borderStyle: "solid",
     borderColor: "#D6D6D6",
   },
+  scrollableContainer: {
+    height: "100%",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+  },
+  canvasContainer: {
+    flexShrink: 0,
+    minHeight: "fit-content",
+  },
+  retryButton: { textTransform: "none" },
 };
 
 export default styles;
