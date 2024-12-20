@@ -1,6 +1,5 @@
 const ROUTES = Object.freeze({
-  HOME: "/",
-  SCAN: "/scan",
+  SCAN: "/",
   SIGNED_CODES_HISTORY: "/history",
   SIGNATURE_CODE: (code: string) => `/signature/${code}`,
 });
