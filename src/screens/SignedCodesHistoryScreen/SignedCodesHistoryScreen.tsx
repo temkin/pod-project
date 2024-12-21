@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, List, Divider, Box, Fab } from "@mui/material";
+import { Typography, List, Box, Fab } from "@mui/material";
 import {
   QrCode as QrCodeIcon,
   CropFreeOutlined as ScanIcon,
@@ -23,9 +23,8 @@ const SignedCodesHistoryScreen = () => {
       <Box sx={styles.listContainer}>
         {signedCodes.length > 0 ? (
           <List>
-            {signedCodes.map((item, index) => (
+            {signedCodes.map((item) => (
               <React.Fragment key={item.id}>
-                {index > 0 && <Divider />}
                 <SignedCodeHistoryItem item={item} />
               </React.Fragment>
             ))}
