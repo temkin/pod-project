@@ -1,9 +1,9 @@
 import { PropsWithChildren } from "react";
+import { useNavigate } from "react-router";
 import { Container, Box, Typography, IconButton } from "@mui/material";
 import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
-import styles from "./styles";
-import { useNavigate } from "react-router";
 import { ROUTES } from "../../app";
+import styles from "./styles";
 
 type LayoutProps = {
   name: string;
@@ -42,16 +42,8 @@ const Layout = ({ children, name }: PropsWithChildren<LayoutProps>) => {
         >
           {name}
         </Typography>
-        <IconButton
-          onClick={handleHistoryClick}
-          sx={{
-            bgcolor: "rgba(255, 255, 255, 0.2)",
-            borderRadius: 2.5,
-            width: 40,
-            height: 40,
-          }}
-        >
-          <FindInPageOutlinedIcon sx={{ color: "white" }} />
+        <IconButton onClick={handleHistoryClick} sx={styles.historyButton}>
+          <FindInPageOutlinedIcon sx={styles.historyButtonIcon} />
         </IconButton>
       </Box>
       <Box sx={styles.content}>{children}</Box>
