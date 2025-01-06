@@ -1,10 +1,23 @@
 const styles = {
   container: {
-    p: 2,
-    mb: 2,
-    bgcolor: "#fff",
-    position: "relative",
-    overflow: "hidden",
+    bgcolor: "rgba(29, 29, 29, 0.8)",
+    zIndex: 2,
+    position: "absolute",
+    py: 1,
+    px: 1.5,
+    borderRadius: 3,
+    top: "calc(40% - 153px - 60px)",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "fit-content",
+    minWidth: "max-content",
+  },
+  positionLabel: {
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontWeight: 400,
+    fontSize: 14,
+    textAlign: "center",
   },
   video: {
     width: "100%",
