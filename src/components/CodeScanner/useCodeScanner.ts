@@ -52,6 +52,11 @@ const useCodeScanner = (
     },
     onError: (err) => {
       if (err instanceof Error) {
+        // TODO: handle cameras initialization
+        if (err.name === "NotReadableError") {
+          return;
+        }
+
         setError(err);
         options?.onError?.(err);
         return;
