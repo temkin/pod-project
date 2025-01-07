@@ -49,6 +49,7 @@ const useCodeScanner = (
         frameRate: { ideal: 30 },
       },
     },
+    timeBetweenDecodingAttempts: 100,
   });
 
   const restartScanning = () => {
