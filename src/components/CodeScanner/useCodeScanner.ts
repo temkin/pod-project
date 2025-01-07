@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarcodeFormat } from "@zxing/library";
 import { useZxing, Result } from "react-zxing";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
@@ -9,6 +9,28 @@ const useCodeScanner = (
   const [scannedCode, setScannedCode] = useState("");
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
+
+  useEffect(() => {
+    const getCameras = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(
+          (device) => device.kind === "videoinput"
+        );
+        setCameras(videoDevices);
+
+        if (!selectedCamera && videoDevices.length > 0) {
+          setSelectedCamera(videoDevices[0].deviceId);
+        }
+      } catch (err) {
+        console.error("Error getting cameras:", err);
+      }
+    };
+
+    getCameras();
+  }, []);
 
   const { ref: videoRef } = useZxing({
     onDecodeResult: (result: Result) => {
@@ -21,7 +43,6 @@ const useCodeScanner = (
           raw: result,
           timestamp: Date.now(),
         });
-
         return;
       }
 
@@ -31,6 +52,11 @@ const useCodeScanner = (
     },
     onError: (err) => {
       if (err instanceof Error) {
+        // TODO: handle cameras initialization
+        if (err.name === "NotReadableError") {
+          return;
+        }
+
         setError(err);
         options?.onError?.(err);
         return;
@@ -42,6 +68,7 @@ const useCodeScanner = (
     },
     constraints: {
       video: {
+        deviceId: selectedCamera ? { exact: selectedCamera } : undefined,
         facingMode: "environment",
         width: { ideal: 1920 },
         height: { ideal: 1080 },
@@ -51,6 +78,10 @@ const useCodeScanner = (
     },
     timeBetweenDecodingAttempts: 100,
   });
+
+  const switchCamera = (deviceId: string) => {
+    setSelectedCamera(deviceId);
+  };
 
   const restartScanning = () => {
     setScannedCode("");
@@ -64,6 +95,9 @@ const useCodeScanner = (
     error,
     isScanning,
     restartScanning,
+    cameras,
+    selectedCamera,
+    switchCamera,
   };
 };
 
