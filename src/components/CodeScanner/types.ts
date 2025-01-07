@@ -17,7 +17,7 @@ export type UseCodeScannerOptions = {
 };
 
 export type UseCodeScannerReturn = {
-  scannerRef: React.RefObject<HTMLDivElement>;
+  scannerRef: React.RefObject<Element | undefined>;
   scannedCode: string;
   error: Error | null;
   isScanning: boolean;

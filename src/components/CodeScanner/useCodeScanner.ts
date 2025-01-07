@@ -5,7 +5,7 @@ import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
 ): UseCodeScannerReturn => {
-  const scannerRef = useRef<HTMLDivElement>(null);
+  const scannerRef = useRef<Element | undefined>();
   const [scannedCode, setScannedCode] = useState("");
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
