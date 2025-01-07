@@ -43,13 +43,13 @@ const useCodeScanner = (
     constraints: {
       video: {
         facingMode: "environment",
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-        aspectRatio: { ideal: 1.7777777778 },
-        frameRate: { ideal: 30 },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        aspectRatio: { ideal: 1.777778 },
+        frameRate: { ideal: 15 },
       },
     },
-    timeBetweenDecodingAttempts: 100,
+    timeBetweenDecodingAttempts: 1000,
   });
 
   const restartScanning = () => {
