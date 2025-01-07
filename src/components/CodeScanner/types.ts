@@ -22,4 +22,7 @@ export type UseCodeScannerReturn = {
   error: Error | null;
   isScanning: boolean;
   restartScanning: () => void;
+  cameras: MediaDeviceInfo[];
+  selectedCamera: string;
+  switchCamera: (deviceId: string) => void;
 };
