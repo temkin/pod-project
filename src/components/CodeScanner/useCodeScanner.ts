@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { BarcodeFormat } from "@zxing/library";
-import { useZxing, Result } from "react-zxing";
+import { useZxing, Result, DecodeHintType } from "react-zxing";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
+
+const hints = new Map();
+const formats = [BarcodeFormat.CODE_128];
+hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+hints.set(DecodeHintType.TRY_HARDER, true);
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -49,7 +54,7 @@ const useCodeScanner = (
         frameRate: { ideal: 30 },
       },
     },
-    timeBetweenDecodingAttempts: 100,
+    hints,
   });
 
   const restartScanning = () => {
