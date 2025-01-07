@@ -44,33 +44,33 @@ const styles = {
     alignItems: "center",
     gap: 1,
   },
-  container: {
-    p: 2,
-    mb: 2,
-    bgcolor: "#fff",
-    position: "relative",
-    overflow: "hidden",
-  },
-  video: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover" as const,
-  },
   videoContainer: {
     position: "relative",
     width: "100%",
     height: "100%",
     aspectRatio: "4/3",
     overflow: "hidden",
-    "&::before": {
-      content: '""',
+    "& video": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+    "& canvas.drawingBuffer": {
       position: "absolute",
       top: 0,
       left: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 1,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
     },
+  },
+  canvas: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover" as const,
   },
   darkOverlay: {
     position: "absolute",
@@ -82,6 +82,7 @@ const styles = {
     borderRadius: "25px",
     boxShadow: "0px 0px 1px 100vmax rgba(29, 29, 29, 0.5)",
     zIndex: 1,
+    pointerEvents: "none",
   },
   scannerOverlay: {
     position: "absolute",
@@ -96,6 +97,7 @@ const styles = {
     outlineOffset: "-5px",
     borderRadius: "25px",
     zIndex: 2,
+    pointerEvents: "none",
     mask: `
       conic-gradient(at 50px 50px, transparent 75%, black 0)
       0 0/calc(100% - 50px) calc(100% - 50px),
@@ -108,6 +110,15 @@ const styles = {
     `,
     transition: "0.4s",
   },
-};
+  iconButton: {
+    bgcolor: "rgba(255, 255, 255, 0.9)",
+    "&:hover": {
+      bgcolor: "rgba(255, 255, 255, 0.7)",
+    },
+    "& .MuiSvgIcon-root": {
+      color: "rgba(0, 0, 0, 0.87)",
+    },
+  },
+} as const;
 
 export default styles;

@@ -1,25 +1,25 @@
-import { Box, Typography, Select, MenuItem } from "@mui/material";
+// CodeScanner.tsx
+import { Box, Typography, Select, MenuItem, IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import FlashlightOnIcon from "@mui/icons-material/FlashlightOn";
+import FlashlightOffIcon from "@mui/icons-material/FlashlightOff";
 import useCodeScanner from "./useCodeScanner";
 import styles from "./styles";
 import { CodeScannerProps } from "./types";
 
 const CodeScanner: React.FC<CodeScannerProps> = ({ onScan, onError }) => {
   const {
-    videoRef,
+    scannerRef,
     isScanning,
-    restartScanning,
     cameras,
     selectedCamera,
     switchCamera,
+    torchOn,
+    toggleTorch,
   } = useCodeScanner({
     onScan,
     onError,
   });
-
-  const handleVideoPlay = () => {
-    restartScanning();
-  };
 
   return (
     <Box height="100%">
@@ -49,16 +49,17 @@ const CodeScanner: React.FC<CodeScannerProps> = ({ onScan, onError }) => {
             ))}
           </Select>
         )}
+        <IconButton onClick={toggleTorch} sx={styles.iconButton}>
+          {torchOn ? <FlashlightOnIcon /> : <FlashlightOffIcon />}
+        </IconButton>
       </Box>
 
-      <Box sx={styles.videoContainer}>
-        <video
-          ref={videoRef}
-          style={styles.video}
-          playsInline
-          muted
-          autoPlay
-          onPlay={handleVideoPlay}
+      <Box sx={styles.videoContainer} ref={scannerRef}>
+        <canvas
+          className="drawingBuffer"
+          style={styles.canvas}
+          width="640"
+          height="480"
         />
         {isScanning && (
           <>
@@ -70,4 +71,5 @@ const CodeScanner: React.FC<CodeScannerProps> = ({ onScan, onError }) => {
     </Box>
   );
 };
+
 export default CodeScanner;
