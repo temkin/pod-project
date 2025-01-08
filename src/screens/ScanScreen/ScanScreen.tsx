@@ -5,6 +5,7 @@ import { ROUTES } from "../../app";
 import { CodeScanner, Layout, ScanningInstructions } from "../../components";
 import { ScanResult } from "../../components/types";
 import { NOTIFICATIONS_SEVERITIES } from "../../lib";
+import styles from "./styles";
 
 const ScanScreen = () => {
   const navigate = useNavigate();
@@ -27,16 +28,7 @@ const ScanScreen = () => {
           <CodeScanner onScan={handleScan} onError={handleError} />
         </Grid>
 
-        <Box
-          sx={{
-            position: "absolute",
-            zIndex: 2,
-            bottom: 0,
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <Box sx={styles.instructionsContainer}>
           <ScanningInstructions />
         </Box>
       </Grid>
