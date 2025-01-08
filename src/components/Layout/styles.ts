@@ -13,6 +13,13 @@ const styles = {
     position: "relative",
     height: "calc(100% - 64px)",
   },
+  historyButton: {
+    bgcolor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 2.5,
+    width: 40,
+    height: 40,
+  },
+  historyButtonIcon: { color: "white" },
 } as const;
 
 export default styles;
