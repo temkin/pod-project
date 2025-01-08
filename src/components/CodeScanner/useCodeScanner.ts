@@ -22,7 +22,9 @@ const useCodeScanner = (
         setCameras(devices);
 
         if (devices.length > 0) {
-          setSelectedCamera(devices[0].deviceId);
+          const lastDeviceIndex = devices.length - 1;
+          const lastDeviceId = devices[lastDeviceIndex].deviceId;
+          setSelectedCamera(lastDeviceId);
         }
 
         await Quagga.CameraAccess.disableTorch();
