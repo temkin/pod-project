@@ -23,40 +23,49 @@ const Layout = ({ children, name }: PropsWithChildren<LayoutProps>) => {
         height={64}
         display="flex"
         alignItems="center"
-        justifyContent="space-between"
         px={2}
       >
-        <Typography
-          fontFamily="Raleway"
-          fontWeight={500}
-          fontSize={21}
-          color="#FFFFFF"
-        >
-          POD
-        </Typography>
-        <Typography
-          fontFamily="Poppins"
-          fontWeight={500}
-          fontSize={18}
-          color="#FFFFFF"
-        >
-          {name}
-        </Typography>
-        <IconButton
-          onClick={handleHistoryClick}
-          sx={{
-            bgcolor: "rgba(255, 255, 255, 0.2)",
-            borderRadius: 2.5,
-            width: 40,
-            height: 40,
-          }}
-        >
-          <FindInPageOutlinedIcon sx={{ color: "white" }} />
-        </IconButton>
+        <Box flex={1} display="flex" gap={1} alignItems="baseline">
+          <Typography
+            fontFamily="Raleway"
+            fontWeight={500}
+            fontSize={21}
+            color="#FFFFFF"
+          >
+            POD
+          </Typography>
+          <Typography
+            fontFamily="Raleway"
+            fontWeight={500}
+            fontSize={14}
+            color="#FFFFFF"
+          >
+            v0.1.1
+          </Typography>
+        </Box>
+
+        <Box flex={1} textAlign="center">
+          <Typography
+            fontFamily="Poppins"
+            fontWeight={500}
+            fontSize={18}
+            color="#FFFFFF"
+          >
+            {name}
+          </Typography>
+        </Box>
+
+        <Box flex={1} display="flex" justifyContent="flex-end">
+          <IconButton
+            onClick={handleHistoryClick}
+            sx={styles.historyButton}
+          >
+            <FindInPageOutlinedIcon sx={styles.historyButtonIcon} />
+          </IconButton>
+        </Box>
       </Box>
       <Box sx={styles.content}>{children}</Box>
     </Container>
   );
 };
-
 export default Layout;
