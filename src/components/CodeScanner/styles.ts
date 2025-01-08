@@ -1,5 +1,5 @@
 const styles = {
-  container: {
+  headerContainer: {
     bgcolor: "rgba(29, 29, 29, 0.8)",
     zIndex: 2,
     position: "absolute",
@@ -12,17 +12,37 @@ const styles = {
     width: "fit-content",
     minWidth: "max-content",
   },
-  positionLabel: {
+  headerText: {
     color: "#FFFFFF",
     fontFamily: "Poppins",
     fontWeight: 400,
     fontSize: 14,
     textAlign: "center",
   },
-  video: {
+  controlsContainer: {
+    position: "absolute",
+    bottom: 130,
+    zIndex: 3,
+    display: "flex",
+    gap: 1,
+    alignItems: "center",
+    justifyContent: "center",
     width: "100%",
-    height: "100%",
-    objectFit: "cover" as const,
+  },
+  cameraSelect: {
+    bgcolor: "rgba(255, 255, 255, 0.9)",
+    height: 40,
+    borderRadius: 2,
+    "& .MuiSelect-select": {
+      paddingY: 1,
+      display: "flex",
+      alignItems: "center",
+    },
+  },
+  cameraMenuItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
   },
   videoContainer: {
     position: "relative",
@@ -30,16 +50,27 @@ const styles = {
     height: "100%",
     aspectRatio: "4/3",
     overflow: "hidden",
-
-    "&::before": {
-      content: '""',
+    "& video": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+    "& canvas.drawingBuffer": {
       position: "absolute",
       top: 0,
       left: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 1,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
     },
+  },
+  canvas: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover" as const,
   },
   darkOverlay: {
     position: "absolute",
@@ -51,6 +82,7 @@ const styles = {
     borderRadius: "25px",
     boxShadow: "0px 0px 1px 100vmax rgba(29, 29, 29, 0.5)",
     zIndex: 1,
+    pointerEvents: "none",
   },
   scannerOverlay: {
     position: "absolute",
@@ -65,18 +97,28 @@ const styles = {
     outlineOffset: "-5px",
     borderRadius: "25px",
     zIndex: 2,
+    pointerEvents: "none",
     mask: `
-        conic-gradient(at 50px 50px, transparent 75%, black 0)
-        0 0/calc(100% - 50px) calc(100% - 50px),
-        linear-gradient(black 0 0) content-box
+      conic-gradient(at 50px 50px, transparent 75%, black 0)
+      0 0/calc(100% - 50px) calc(100% - 50px),
+      linear-gradient(black 0 0) content-box
     `,
     WebkitMask: `
-        conic-gradient(at 50px 50px, transparent 75%, black 0)
-        0 0/calc(100% - 50px) calc(100% - 50px),
-        linear-gradient(black 0 0) content-box
+      conic-gradient(at 50px 50px, transparent 75%, black 0)
+      0 0/calc(100% - 50px) calc(100% - 50px),
+      linear-gradient(black 0 0) content-box
     `,
     transition: "0.4s",
   },
-};
+  iconButton: {
+    bgcolor: "rgba(255, 255, 255, 0.9)",
+    "&:hover": {
+      bgcolor: "rgba(255, 255, 255, 0.7)",
+    },
+    "& .MuiSvgIcon-root": {
+      color: "rgba(0, 0, 0, 0.87)",
+    },
+  },
+} as const;
 
 export default styles;

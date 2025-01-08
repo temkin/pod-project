@@ -1,68 +1,139 @@
-import { useState } from "react";
-import { BarcodeFormat } from "@zxing/library";
-import { useZxing, Result } from "react-zxing";
+import { useState, useEffect, useRef, useCallback } from "react";
+import Quagga from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
 ): UseCodeScannerReturn => {
+  const scannerRef = useRef<Element | undefined>();
   const [scannedCode, setScannedCode] = useState("");
   const [error, setError] = useState<Error | null>(null);
-  const [isScanning, setIsScanning] = useState(false);
+  const [isScanning, setIsScanning] = useState(true);
+  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
+  const [torchOn, setTorchOn] = useState(false);
 
-  const { ref: videoRef } = useZxing({
-    onDecodeResult: (result: Result) => {
-      if (result.getBarcodeFormat() === BarcodeFormat.CODE_128) {
-        const code = result.getText();
-        setScannedCode(code);
-        setIsScanning(false);
-        options?.onScan?.({
-          code,
-          raw: result,
-          timestamp: Date.now(),
+  useEffect(() => {
+    const initializeCameras = async () => {
+      try {
+        await Quagga.CameraAccess.request(null, {});
+        await Quagga.CameraAccess.release();
+        const devices = await Quagga.CameraAccess.enumerateVideoDevices();
+        setCameras(devices);
+
+        if (devices.length > 0) {
+          const lastDeviceIndex = devices.length - 1;
+          const lastDeviceId = devices[lastDeviceIndex].deviceId;
+          setSelectedCamera(lastDeviceId);
+        }
+
+        await Quagga.CameraAccess.disableTorch();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error("Camera initialization failed")
+        );
+        options?.onError?.(
+          err instanceof Error ? err : new Error("Camera initialization failed")
+        );
+      }
+    };
+
+    initializeCameras();
+    return () => {
+      Quagga.CameraAccess.release();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!scannerRef.current || !selectedCamera || !isScanning) return;
+
+    const initScanner = async () => {
+      try {
+        await Quagga.init(
+          {
+            inputStream: {
+              type: "LiveStream",
+              constraints: {
+                deviceId: selectedCamera,
+                width: 1980,
+                height: 1080,
+              },
+              target: scannerRef.current,
+              willReadFrequently: true,
+            },
+            locator: {
+              patchSize: "medium",
+              halfSample: true,
+              willReadFrequently: true,
+            },
+            decoder: {
+              readers: ["code_128_reader"],
+            },
+            locate: true,
+          },
+          (err) => {
+            if (err) {
+              console.error("Quagga initialization error:", err);
+              return;
+            }
+            Quagga.start();
+          }
+        );
+
+        Quagga.onDetected((result) => {
+          if (result.codeResult) {
+            const code = result.codeResult.code;
+            if (code) {
+              setScannedCode(code);
+              options?.onScan?.({
+                code,
+                raw: result,
+                timestamp: Date.now(),
+              });
+            }
+          }
         });
-
-        return;
+      } catch (err) {
+        console.error("Scanner initialization error:", err);
       }
+    };
 
-      const unknownFormatError = new Error("Incorrect code format");
-      setError(unknownFormatError);
-      options?.onError?.(unknownFormatError);
-    },
-    onError: (err) => {
-      if (err instanceof Error) {
-        setError(err);
-        options?.onError?.(err);
-        return;
-      }
+    initScanner();
 
-      const unknownError = new Error("An unknown error occurred");
-      setError(unknownError);
-      options?.onError?.(unknownError);
-    },
-    constraints: {
-      video: {
-        facingMode: "environment",
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-        aspectRatio: { ideal: 1.7777777778 },
-        frameRate: { ideal: 30 },
-      },
-    },
-  });
+    return () => {
+      Quagga.stop();
+    };
+  }, [selectedCamera, isScanning]);
 
-  const restartScanning = () => {
-    setScannedCode("");
-    setError(null);
-    setIsScanning(true);
+  const toggleScanning = () => {
+    setIsScanning(!isScanning);
+  };
+
+  const toggleTorch = useCallback(() => {
+    if (torchOn) {
+      Quagga.CameraAccess.disableTorch();
+    } else {
+      Quagga.CameraAccess.enableTorch();
+    }
+    setTorchOn(!torchOn);
+  }, [torchOn]);
+
+  const switchCamera = (deviceId: string) => {
+    Quagga.stop();
+    setSelectedCamera(deviceId);
   };
 
   return {
-    videoRef,
+    scannerRef,
     scannedCode,
     error,
     isScanning,
-    restartScanning,
+    toggleScanning,
+    cameras,
+    selectedCamera,
+    switchCamera,
+    torchOn,
+    toggleTorch,
   };
 };
 

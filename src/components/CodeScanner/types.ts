@@ -1,4 +1,4 @@
-import { Result } from "react-zxing";
+import { QuaggaJSResultObject } from "@ericblade/quagga2";
 
 export type CodeScannerProps = {
   onScan?: (result: ScanResult) => void;
@@ -7,7 +7,7 @@ export type CodeScannerProps = {
 
 export type ScanResult = {
   code: string;
-  raw: Result;
+  raw: QuaggaJSResultObject;
   timestamp: number;
 };
 
@@ -17,9 +17,14 @@ export type UseCodeScannerOptions = {
 };
 
 export type UseCodeScannerReturn = {
-  videoRef: React.RefObject<HTMLVideoElement>;
+  scannerRef: React.RefObject<Element | undefined>;
   scannedCode: string;
   error: Error | null;
   isScanning: boolean;
-  restartScanning: () => void;
+  toggleScanning: () => void;
+  cameras: MediaDeviceInfo[];
+  selectedCamera: string;
+  switchCamera: (deviceId: string) => void;
+  torchOn: boolean;
+  toggleTorch: () => void;
 };

@@ -19,9 +19,7 @@ const styles = {
     width: 40,
     height: 40,
   },
-  historyButtonIcon: {
-    color: "white",
-  },
-};
+  historyButtonIcon: { color: "white" },
+} as const;
 
 export default styles;
