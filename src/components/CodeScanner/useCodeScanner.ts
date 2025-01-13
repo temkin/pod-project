@@ -129,9 +129,8 @@ const useCodeScanner = (
       Quagga.stop();
       Quagga.CameraAccess.release();
     };
-  }, []); // Empty dependency array for initial setup only
+  }, []); 
 
-  // Handle camera switching
   const switchCamera = useCallback(
     async (deviceId: string) => {
       try {
@@ -152,10 +151,8 @@ const useCodeScanner = (
   const toggleScanning = useCallback(() => {
     setIsScanning((prev) => {
       if (!prev) {
-        // If turning scanning on, reinitialize with current camera
         initScanner(selectedCamera || "");
       } else {
-        // If turning scanning off, stop everything
         Quagga.stop();
       }
       return !prev;
