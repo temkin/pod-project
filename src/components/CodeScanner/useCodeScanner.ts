@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Quagga from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
-
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
 ): UseCodeScannerReturn => {
@@ -17,11 +16,14 @@ const useCodeScanner = (
   useEffect(() => {
     const initializeCameras = async () => {
       try {
+        await Quagga.CameraAccess.request(null, {});
+        await Quagga.CameraAccess.release();
+
         const detectedCameras =
           await Quagga.CameraAccess.enumerateVideoDevices();
         setCameras(detectedCameras);
 
-        if (detectedCameras.length > 0 && !selectedCamera) {
+        if (detectedCameras.length > 0) {
           const backCameras = detectedCameras.filter((device) => {
             return device.label.toLowerCase().includes("back");
           });
@@ -32,6 +34,8 @@ const useCodeScanner = (
           const detectedSelectedCamera = lastBackCamera || lastCamera;
           setSelectedCamera(detectedSelectedCamera.deviceId);
         }
+
+        await Quagga.CameraAccess.disableTorch();
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("Camera initialization failed")
@@ -46,7 +50,7 @@ const useCodeScanner = (
     return () => {
       Quagga.CameraAccess.release();
     };
-  }, [selectedCamera]);
+  }, []);
 
   useEffect(() => {
     if (!scannerRef.current || !selectedCamera || !isScanning) return;
@@ -134,7 +138,7 @@ const useCodeScanner = (
     isScanning,
     toggleScanning,
     cameras,
-    selectedCamera: selectedCamera || "",
+    selectedCamera,
     switchCamera,
     torchOn,
     toggleTorch,
