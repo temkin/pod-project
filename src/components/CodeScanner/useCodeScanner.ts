@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocalStorage } from "react-use";
 import Quagga from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
+
+const SELECTED_CAMERA_KEY = "selectedCamera";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -10,24 +13,30 @@ const useCodeScanner = (
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string>("");
+  const [selectedCamera, setSelectedCamera] = useLocalStorage<string>(
+    SELECTED_CAMERA_KEY,
+    ""
+  );
   const [torchOn, setTorchOn] = useState(false);
 
   useEffect(() => {
     const initializeCameras = async () => {
       try {
-        await Quagga.CameraAccess.request(null, {});
-        await Quagga.CameraAccess.release();
-        const devices = await Quagga.CameraAccess.enumerateVideoDevices();
-        setCameras(devices);
+        const detectedCameras =
+          await Quagga.CameraAccess.enumerateVideoDevices();
+        setCameras(detectedCameras);
 
-        if (devices.length > 0) {
-          const lastDeviceIndex = devices.length - 1;
-          const lastDeviceId = devices[lastDeviceIndex].deviceId;
-          setSelectedCamera(lastDeviceId);
+        if (detectedCameras.length > 0 && !selectedCamera) {
+          const backCameras = detectedCameras.filter((device) => {
+            return device.label.toLowerCase().includes("back");
+          });
+
+          const lastBackCamera = backCameras[backCameras.length - 1];
+          const lastCamera = detectedCameras[detectedCameras.length - 1];
+
+          const detectedSelectedCamera = lastBackCamera || lastCamera;
+          setSelectedCamera(detectedSelectedCamera.deviceId);
         }
-
-        await Quagga.CameraAccess.disableTorch();
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("Camera initialization failed")
@@ -42,7 +51,7 @@ const useCodeScanner = (
     return () => {
       Quagga.CameraAccess.release();
     };
-  }, []);
+  }, [selectedCamera]);
 
   useEffect(() => {
     if (!scannerRef.current || !selectedCamera || !isScanning) return;
@@ -55,8 +64,8 @@ const useCodeScanner = (
               type: "LiveStream",
               constraints: {
                 deviceId: selectedCamera,
-                width: 1980,
-                height: 1080,
+                width: { ideal: 1920 },
+                height: { ideal: 1080 },
               },
               target: scannerRef.current,
               willReadFrequently: true,
@@ -130,7 +139,7 @@ const useCodeScanner = (
     isScanning,
     toggleScanning,
     cameras,
-    selectedCamera,
+    selectedCamera: selectedCamera || "",
     switchCamera,
     torchOn,
     toggleTorch,
