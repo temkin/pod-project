@@ -35,7 +35,7 @@ const useCodeScanner = (
           const lastCamera = detectedCameras[detectedCameras.length - 1];
 
           const detectedSelectedCamera = lastBackCamera || lastCamera;
-          switchCamera(detectedSelectedCamera.deviceId);
+          setSelectedCamera(detectedSelectedCamera.deviceId);
         }
       } catch (err) {
         setError(
@@ -104,10 +104,6 @@ const useCodeScanner = (
         });
       } catch (err) {
         console.error("Scanner initialization error:", err);
-
-        options?.onError?.(
-          err instanceof Error ? err : new Error("Camera initialization failed")
-        );
       }
     };
 
