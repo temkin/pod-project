@@ -1,6 +1,8 @@
+import { alpha, Theme } from "@mui/material";
+
 const styles = {
   headerContainer: {
-    bgcolor: "rgba(29, 29, 29, 0.8)",
+    bgcolor: (theme: Theme) => alpha(theme.palette.text.primary, 0.8),
     zIndex: 2,
     position: "absolute",
     py: 1,
@@ -11,13 +13,6 @@ const styles = {
     transform: "translateX(-50%)",
     width: "fit-content",
     minWidth: "max-content",
-  },
-  headerText: {
-    color: "#FFFFFF",
-    fontFamily: "Poppins",
-    fontWeight: 400,
-    fontSize: 14,
-    textAlign: "center",
   },
   controlsContainer: {
     position: "absolute",
@@ -30,7 +25,7 @@ const styles = {
     width: "100%",
   },
   cameraSelect: {
-    bgcolor: "rgba(255, 255, 255, 0.9)",
+    bgcolor: (theme: Theme) => alpha(theme.palette.common.white, 0.9),
     height: 40,
     borderRadius: 2,
     "& .MuiSelect-select": {
@@ -80,7 +75,8 @@ const styles = {
     width: 306,
     height: 306,
     borderRadius: "25px",
-    boxShadow: "0px 0px 1px 100vmax rgba(29, 29, 29, 0.5)",
+    boxShadow: (theme: Theme) =>
+      `0px 0px 1px 100vmax ${alpha(theme.palette.text.primary, 0.5)}`,
     zIndex: 1,
     pointerEvents: "none",
   },
@@ -93,7 +89,7 @@ const styles = {
     height: 260,
     backgroundColor: "transparent",
     padding: "calc(20px + 5px)",
-    outline: "5px solid #2EE18E",
+    outline: (theme: Theme) => `5px solid ${theme.palette.secondary.main}`,
     outlineOffset: "-5px",
     borderRadius: "25px",
     zIndex: 2,
@@ -111,12 +107,12 @@ const styles = {
     transition: "0.4s",
   },
   iconButton: {
-    bgcolor: "rgba(255, 255, 255, 0.9)",
+    bgcolor: (theme: Theme) => alpha(theme.palette.common.white, 0.9),
     "&:hover": {
-      bgcolor: "rgba(255, 255, 255, 0.7)",
+      bgcolor: (theme: Theme) => alpha(theme.palette.common.white, 0.7),
     },
     "& .MuiSvgIcon-root": {
-      color: "rgba(0, 0, 0, 0.87)",
+      color: (theme: Theme) => alpha(theme.palette.common.black, 0.87),
     },
   },
 } as const;

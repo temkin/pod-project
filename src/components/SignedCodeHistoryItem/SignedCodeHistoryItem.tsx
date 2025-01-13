@@ -22,6 +22,7 @@ import {
   NOTIFICATIONS_SEVERITIES,
 } from "../../lib";
 import { SignedCode } from "../../store/types";
+import styles from "./styles";
 
 const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
   const [expanded, setExpanded] = useState(false);
@@ -43,38 +44,15 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
   });
 
   return (
-    <ListItem sx={{ p: 0, mb: 2 }}>
-      <Paper
-        elevation={0}
-        sx={{
-          width: "100%",
-          borderRadius: "20px",
-          p: 2,
-        }}
-      >
-        <Box display="flex" alignItems="flex-start" gap={2}>
-          <Box
-            sx={{
-              width: 40,
-              height: 40,
-              bgcolor: "#2EE18E",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <QrCodeIcon sx={{ color: "#1D1D1D" }} />
+    <ListItem sx={styles.listItem}>
+      <Paper elevation={0} sx={styles.paper}>
+        <Box sx={styles.headerContainer}>
+          <Box sx={styles.iconContainer}>
+            <QrCodeIcon sx={{ color: "text.primary" }} />
           </Box>
 
-          <Box flex={1}>
-            <Typography
-              fontFamily="Poppins"
-              fontSize={20}
-              fontWeight={500}
-              variant="h6"
-              color="#1D1D1D"
-            >
+          <Box sx={styles.codeContainer}>
+            <Typography typography="h5" variant="h5" color="text.primary">
               {item.code}
             </Typography>
           </Box>
@@ -82,73 +60,34 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
           <Tooltip title="Copy code">
             <IconButton
               onClick={() => handleCopyCode(item.code)}
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: "10px",
-              }}
+              sx={styles.copyButton}
             >
-              <CopyIcon sx={{ color: "#1D1D1D" }} />
+              <CopyIcon sx={{ color: "text.primary" }} />
             </IconButton>
           </Tooltip>
         </Box>
 
-        <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-          <Typography
-            fontFamily="Poppins"
-            fontSize={14}
-            fontWeight={400}
-            sx={{ fontSize: 14 }}
-          >
-            {item.user.name}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              bgcolor: "rgba(46, 225, 142, 0.2)",
-              borderRadius: "4px",
-
-              width: "fit-content",
-            }}
-          >
+        <Box sx={styles.userInfoContainer}>
+          <Typography typography="subtitle2">{item.user.name}</Typography>
+          <Box sx={styles.statusBadge}>
             <Typography
-              fontFamily="Poppins"
-              fontWeight={500}
-              fontSize={14}
-              color="#2EE18E"
-              textTransform="uppercase"
-              px={1}
-              borderRadius={4}
+              typography="caption"
+              color="success.main"
+              sx={styles.statusText}
             >
               Signed
             </Typography>
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            color: "#989393",
-          }}
-        >
-          <Box display="flex" alignItems="center" gap={1}>
-            <Box display="flex" alignItems="center" gap={0.5}>
+        <Box sx={styles.metadataContainer}>
+          <Box sx={styles.dateTimeContainer}>
+            <Box sx={styles.dateTimeGroup}>
               <CalendarTodayIcon fontSize="small" />
               <Typography fontSize={14}>{date}</Typography>
             </Box>
-            <Box
-              sx={{
-                width: 4,
-                height: 4,
-                borderRadius: "50%",
-                bgcolor: "#989393",
-              }}
-            />
-            <Box display="flex" alignItems="center" gap={0.5}>
+            <Box sx={styles.separator} />
+            <Box sx={styles.dateTimeGroup}>
               <AccessTimeIcon fontSize="small" />
               <Typography fontSize={14}>{time}</Typography>
             </Box>
@@ -157,12 +96,10 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
           <IconButton
             onClick={() => setExpanded(!expanded)}
             sx={{
-              width: 40,
-              height: 40,
-              bgcolor: "#F1F2F6",
-              borderRadius: "10px",
-              transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 0.3s",
+              ...styles.expandButton,
+              ...(expanded
+                ? styles.expandButtonRotated
+                : styles.expandButtonNormal),
             }}
           >
             <KeyboardArrowDownIcon />
@@ -170,15 +107,14 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
         </Box>
 
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <Box sx={{ mt: 2 }}>
-            <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+          <Box sx={styles.collapseContent}>
+            <Box sx={styles.barcodeContainer}>
               <Barcode
                 value={item.code}
                 width={1.5}
                 height={50}
                 fontSize={14}
                 margin={10}
-                background="#ffffff"
               />
             </Box>
 
@@ -187,13 +123,7 @@ const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
                 component="img"
                 src={item.signature}
                 alt="Signature"
-                sx={{
-                  width: "100%",
-                  maxHeight: 100,
-                  objectFit: "contain",
-                  border: '1px solid #D6D6D6',
-                  borderRadius: 5,
-                }}
+                sx={styles.signatureImage}
               />
             </Box>
           </Box>

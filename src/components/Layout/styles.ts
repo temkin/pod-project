@@ -1,3 +1,5 @@
+import { alpha, Theme } from "@mui/material";
+
 const styles = {
   container: {
     height: "100%",
@@ -7,19 +9,19 @@ const styles = {
     right: 0,
     overflow: "auto",
     p: 0,
-    bgcolor: "#F1F2F6",
+    bgcolor: "background.default",
   },
   content: {
     position: "relative",
     height: "calc(100% - 64px)",
   },
   historyButton: {
-    bgcolor: "rgba(255, 255, 255, 0.2)",
+    bgcolor: (theme: Theme) => alpha(theme.palette.common.white, 0.2),
     borderRadius: 2.5,
     width: 40,
     height: 40,
   },
-  historyButtonIcon: { color: "white" },
-} as const;
+  historyButtonIcon: { color: "common.white" },
+};
 
 export default styles;

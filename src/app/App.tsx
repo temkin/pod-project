@@ -1,20 +1,24 @@
 import { BrowserRouter } from "react-router";
-import { NotificationsProvider } from "@toolpad/core/useNotifications";
-import Root from "./Root";
 import { Provider } from "react-redux";
+import { NotificationsProvider } from "@toolpad/core/useNotifications";
+import { ThemeProvider } from "@mui/material";
 import store from "../store";
 import { MODES } from "../env";
+import { lightTheme } from "../themes";
+import Root from "./Root";
 
 const App = () => {
   const basename = import.meta.env.MODE === MODES.PROD ? `/pod-project` : "/";
 
   return (
     <Provider store={store}>
-      <NotificationsProvider>
+      <ThemeProvider theme={lightTheme}>
         <BrowserRouter basename={basename}>
-          <Root />
+          <NotificationsProvider>
+            <Root />
+          </NotificationsProvider>
         </BrowserRouter>
-      </NotificationsProvider>
+      </ThemeProvider>
     </Provider>
   );
 };

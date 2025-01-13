@@ -31,7 +31,7 @@ const SignedCodesHistoryScreen = () => {
           </List>
         ) : (
           <Box sx={styles.emptyState}>
-            <QrCodeIcon sx={{ fontSize: 48, mb: 2, opacity: 0.5 }} />
+            <QrCodeIcon sx={styles.codeIcon} />
             <Typography variant="h6" gutterBottom>
               No signed codes yet
             </Typography>
@@ -41,16 +41,9 @@ const SignedCodesHistoryScreen = () => {
           </Box>
         )}
       </Box>
-      <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
-        <Fab
-          onClick={handleScannerClick}
-          sx={{
-            borderRadius: 4,
-            boxShadow: "unset",
-            backgroundColor: "#2A61E1",
-          }}
-        >
-          <ScanIcon sx={{ color: "#FFFFFF" }} />
+      <Box sx={styles.fabContainer}>
+        <Fab onClick={handleScannerClick} sx={styles.fab}>
+          <ScanIcon sx={styles.scanIcon} />
         </Fab>
       </Box>
     </Layout>

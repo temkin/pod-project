@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState } from "react";
 import SignatureCanvas from "react-signature-pad-wrapper";
 import { UseSignatureOptions, UseSignatureReturn } from "./types";
 
@@ -9,7 +9,7 @@ export const useSignature = (
   const [signature, setSignature] = useState<string>("");
   const [error, setError] = useState<Error | null>(null);
 
-  const saveSignature = useCallback(() => {
+  const saveSignature = () => {
     try {
       if (!sigPadRef.current) {
         throw new Error("Signature pad not initialized");
@@ -29,16 +29,17 @@ export const useSignature = (
       setError(error);
       options.onError?.(error);
     }
-  }, [options]);
+  };
 
-  const clearSignature = useCallback(() => {
+  const clearSignature = () => {
     if (sigPadRef.current) {
       sigPadRef.current.clear();
     }
+
     setSignature("");
     setError(null);
     options.onClear?.();
-  }, [options]);
+  };
 
   return {
     sigPadRef,

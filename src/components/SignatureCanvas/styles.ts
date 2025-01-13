@@ -1,23 +1,25 @@
+import { Theme } from "@mui/material";
+
 const styles = {
   container: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   signatureBox: {
     flex: 1,
-    position: 'relative',
-    backgroundColor: "#fff",
+    position: "relative",
+    backgroundColor: "common.white",
     borderRadius: 4,
-    border: "1px solid #D6D6D6",
-    overflow: 'hidden',
+    border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
+    overflow: "hidden",
     minHeight: 100,
   },
   canvas: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    touchAction: 'none',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    touchAction: "none",
   },
   alert: {
     marginTop: 2,
@@ -29,13 +31,13 @@ const styles = {
     marginTop: 2,
   },
   clearButton: {
-    width: "30%", 
-    borderRadius: 3, 
+    width: "30%",
+    borderRadius: 3,
     py: 2,
   },
   saveButton: {
-    width: "70%", 
-    borderRadius: 3, 
+    width: "70%",
+    borderRadius: 3,
     py: 2,
   },
 };
