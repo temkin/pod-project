@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useLocalStorage } from "react-use";
 import Quagga from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
-const SELECTED_CAMERA_KEY = "selectedCamera";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -13,10 +11,7 @@ const useCodeScanner = (
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useLocalStorage<string>(
-    SELECTED_CAMERA_KEY,
-    ""
-  );
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
   const [torchOn, setTorchOn] = useState(false);
 
   useEffect(() => {
