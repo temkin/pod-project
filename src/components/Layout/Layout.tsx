@@ -19,47 +19,32 @@ const Layout = ({ children, name }: PropsWithChildren<LayoutProps>) => {
   return (
     <Container sx={styles.container}>
       <Box
-        bgcolor="#1D1D1D"
+        bgcolor="text.primary"
         height={64}
         display="flex"
         alignItems="center"
         px={2}
       >
         <Box flex={1} display="flex" gap={1} alignItems="baseline">
-          <Typography
-            fontFamily="Raleway"
-            fontWeight={500}
-            fontSize={21}
-            color="#FFFFFF"
-          >
+          <Typography typography="title" color="common.white">
             POD
           </Typography>
           <Typography
-            fontFamily="Raleway"
-            fontWeight={500}
-            fontSize={14}
-            color="#FFFFFF"
+            typography="small"
+            color="common.white"
           >
             v0.1.1
           </Typography>
         </Box>
 
         <Box flex={1} textAlign="center">
-          <Typography
-            fontFamily="Poppins"
-            fontWeight={500}
-            fontSize={18}
-            color="#FFFFFF"
-          >
+          <Typography typography="h6" variant="h6" color="common.white">
             {name}
           </Typography>
         </Box>
 
         <Box flex={1} display="flex" justifyContent="flex-end">
-          <IconButton
-            onClick={handleHistoryClick}
-            sx={styles.historyButton}
-          >
+          <IconButton onClick={handleHistoryClick} sx={styles.historyButton}>
             <FindInPageOutlinedIcon sx={styles.historyButtonIcon} />
           </IconButton>
         </Box>

@@ -1,66 +1,103 @@
+import { alpha, Theme } from "@mui/material";
+
 const styles = {
   listItem: {
-    py: 2,
-    "&:hover": {
-      bgcolor: "rgba(0, 0, 0, 0.02)",
-    },
+    p: 0,
+    mb: 2,
   },
-  codeAvatar: {
-    bgcolor: "#e3f2fd",
-    color: "#1976d2",
+  paper: {
+    width: "100%",
+    borderRadius: "20px",
+    p: 2,
   },
-  codeText: {
-    fontFamily: "monospace",
-    fontWeight: "medium",
+  headerContainer: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: 2,
   },
-  timestamp: {
+  iconContainer: {
+    width: 40,
+    height: 40,
+    bgcolor: "secondary.main",
+    borderRadius: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  codeContainer: {
+    flex: 1,
+  },
+  copyButton: {
+    width: 40,
+    height: 40,
+    borderRadius: "10px",
+  },
+  userInfoContainer: {
+    mt: 2,
+    display: "flex",
+    gap: 1,
+  },
+  statusBadge: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+    bgcolor: (theme: Theme) => alpha(theme.palette.secondary.main, 0.2),
+    borderRadius: "4px",
+    width: "fit-content",
+  },
+  statusText: {
+    px: 1,
+    borderRadius: 4,
+  },
+  metadataContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    color: "text.secondary",
+  },
+  dateTimeContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+  },
+  dateTimeGroup: {
     display: "flex",
     alignItems: "center",
     gap: 0.5,
-    color: "text.secondary",
-    fontSize: "0.875rem",
   },
-  chip: {
-    bgcolor: "#e8f5e9",
-    color: "#2e7d32",
-    fontWeight: "medium",
-  },
-  copyButton: {
-    color: "text.secondary",
-  },
-  expandedContent: {
-    p: 2,
-    bgcolor: "#fff",
-  },
-  barcodeContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    p: 2,
-    border: "1px solid #e0e0e0",
-    borderRadius: 1,
-  },
-  signatureContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    p: 2,
-    border: "1px solid #e0e0e0",
-    borderRadius: 1,
-  },
-  signatureImage: {
-    maxWidth: "100%",
-    height: "auto",
-    maxHeight: "100px",
-    objectFit: "contain",
-    bgcolor: "#fff",
+  separator: {
+    width: 4,
+    height: 4,
+    borderRadius: "50%",
+    bgcolor: "text.secondary",
   },
   expandButton: {
+    width: 40,
+    height: 40,
+    bgcolor: "background.default",
+    borderRadius: "10px",
+    transition: "transform 0.3s",
+  },
+  expandButtonRotated: {
+    transform: "rotate(180deg)",
+  },
+  expandButtonNormal: {
     transform: "rotate(0deg)",
-    transition: "0.3s",
-    "&.expanded": {
-      transform: "rotate(180deg)",
-    },
+  },
+  collapseContent: {
+    mt: 2,
+  },
+  barcodeContainer: {
+    mb: 2,
+    display: "flex",
+    justifyContent: "center",
+  },
+  signatureImage: {
+    width: "100%",
+    maxHeight: 100,
+    objectFit: "contain",
+    border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
+    borderRadius: 5,
   },
 };
 

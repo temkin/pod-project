@@ -52,14 +52,12 @@ const SignatureScreen = () => {
           <Stack spacing={1} sx={styles.contentStack}>
             <Stack direction="row" spacing={1} sx={styles.codeDisplay}>
               <QrCodeOutlinedIcon />
-              <Typography sx={styles.codeText}>{barcodeCode}</Typography>
+              <Typography typography="h5" variant="h5">
+                {barcodeCode}
+              </Typography>
             </Stack>
 
-            <Button
-              onClick={handleRetry}
-              startIcon={<RefreshOutlinedIcon />}
-              sx={styles.retryButton}
-            >
+            <Button onClick={handleRetry} startIcon={<RefreshOutlinedIcon />}>
               Retry
             </Button>
 

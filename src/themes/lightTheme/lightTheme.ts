@@ -1,62 +1,101 @@
 import { createTheme } from "@mui/material";
 
 const colors = {
-  primaryMain: "#2A61E1",
-  secondaryMain: "#2EE18E",
-  backgroundDefault: "#F1F2F6",
-  backgroundPaper: "#FFFFFF",
-  textPrimary: "#1D1D1D",
-  textSecondary: "#989393",
-  errorMain: "#dc004e",
-  infoMain: "#2A61E1",
-  successMain: "#2EE18E",
-  warningMain: "#FFA726",
+  white: "#FFFFFF",
+  black: "#000000",
+  blue: "#2A61E1",
+  green: "#2EE18E",
+  lightGrey: "#F1F2F6",
+  mediumGrey: "#D6D6D6",
+  grey: "#989393",
+  darkGrey: "#1D1D1D",
+  red: "#dc004e",
+  orange: "#FFA726",
 };
 
 const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: colors.primaryMain,
+      main: colors.blue,
     },
     secondary: {
-      main: colors.secondaryMain,
+      main: colors.green,
     },
     background: {
-      default: colors.backgroundDefault,
-      paper: colors.backgroundPaper,
+      default: colors.lightGrey,
+      paper: colors.white,
     },
     text: {
-      primary: colors.textPrimary,
-      secondary: colors.textSecondary,
+      primary: colors.darkGrey,
+      secondary: colors.grey,
     },
     error: {
-      main: colors.errorMain,
+      main: colors.red,
     },
     info: {
-      main: colors.infoMain,
+      main: colors.blue,
     },
     success: {
-      main: colors.successMain,
+      main: colors.green,
     },
     warning: {
-      main: colors.warningMain,
+      main: colors.orange,
+    },
+    common: {
+      white: colors.white,
+      black: colors.black,
+    },
+    grey: {
+      "100": colors.lightGrey,
+      "200": colors.mediumGrey,
+      "300": colors.grey,
+      "400": colors.darkGrey,
     },
   },
   typography: {
-    fontFamily: "Poppins, Raleway, Roboto, sans-serif",
-    h6: {
+    fontFamily: "Poppins, Raleway",
+    h5: {
       fontFamily: "Poppins",
       fontWeight: 500,
       fontSize: 20,
     },
-    body2: {
+    h6: {
       fontFamily: "Poppins",
-      fontSize: 14,
+      fontWeight: 500,
+      fontSize: 18,
+    },
+    subtitle1: {
+      fontFamily: "Poppins",
       fontWeight: 400,
+      fontSize: 16,
+    },
+    subtitle2: {
+      fontFamily: "Poppins",
+      fontWeight: 400,
+      fontSize: 14,
+    },
+    caption: {
+      fontFamily: "Poppins",
+      fontWeight: 500,
+      fontSize: 14,
+      textTransform: "uppercase",
     },
     button: {
       textTransform: "none",
+      fontFamily: "Poppins",
+      fontWeight: 500,
+      fontSize: 14,
+    },
+    title: {
+      fontFamily: "Raleway",
+      fontWeight: 500,
+      fontSize: 21,
+    },
+    small: {
+      fontFamily: "Raleway",
+      fontWeight: 500,
+      fontSize: 14,
     },
   },
   components: {

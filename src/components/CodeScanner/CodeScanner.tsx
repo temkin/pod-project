@@ -24,7 +24,11 @@ const CodeScanner: React.FC<CodeScannerProps> = ({ onScan, onError }) => {
   return (
     <Box height="100%">
       <Box sx={styles.headerContainer}>
-        <Typography sx={styles.headerText}>
+        <Typography
+          typography="subtitle2"
+          color="common.white"
+          textAlign="center"
+        >
           Position barcode inside the frame
         </Typography>
       </Box>

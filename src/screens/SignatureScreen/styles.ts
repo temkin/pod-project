@@ -1,3 +1,5 @@
+import { Theme } from "@mui/material";
+
 const styles = {
   container: {
     height: "100%",
@@ -19,14 +21,6 @@ const styles = {
     spacing: 1,
     alignItems: "center",
   },
-  codeText: {
-    fontWeight: 500,
-    fontFamily: "Poppins",
-    fontSize: 20,
-  },
-  retryButton: {
-    textTransform: "none",
-  },
   barcodeContainer: {
     minHeight: 100,
     width: "100%",
@@ -35,7 +29,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
-    border: "1px solid #D6D6D6",
+    border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
   },
   signatureSection: {
     flex: "1 1 50%",
@@ -44,4 +38,4 @@ const styles = {
   },
 };
 
-export default styles
+export default styles;
