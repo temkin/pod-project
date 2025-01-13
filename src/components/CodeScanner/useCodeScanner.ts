@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Quagga from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
-import { useLocalStorage } from "react-use";
-
-const SELECTED_CAMERA_KEY = "selectedCamera";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -13,23 +10,59 @@ const useCodeScanner = (
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useLocalStorage<string>(
-    SELECTED_CAMERA_KEY,
-    ""
-  );
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
   const [torchOn, setTorchOn] = useState(false);
 
-  const initScanner = useCallback(
-    async (deviceId: string) => {
-      if (!scannerRef.current || !isScanning) return;
+  useEffect(() => {
+    const initializeCameras = async () => {
+      try {
+        await Quagga.CameraAccess.request(null, {});
+        await Quagga.CameraAccess.release();
 
+        const detectedCameras =
+          await Quagga.CameraAccess.enumerateVideoDevices();
+        setCameras(detectedCameras);
+
+        if (detectedCameras.length > 0) {
+          const backCameras = detectedCameras.filter((device) => {
+            return device.label.toLowerCase().includes("back");
+          });
+
+          const lastBackCamera = backCameras[backCameras.length - 1];
+          const lastCamera = detectedCameras[detectedCameras.length - 1];
+
+          const detectedSelectedCamera = lastBackCamera || lastCamera;
+          setSelectedCamera(detectedSelectedCamera.deviceId);
+        }
+
+        await Quagga.CameraAccess.disableTorch();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error("Camera initialization failed")
+        );
+        options?.onError?.(
+          err instanceof Error ? err : new Error("Camera initialization failed")
+        );
+      }
+    };
+
+    initializeCameras();
+    return () => {
+      Quagga.CameraAccess.release();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!scannerRef.current || !selectedCamera || !isScanning) return;
+
+    const initScanner = async () => {
       try {
         await Quagga.init(
           {
             inputStream: {
               type: "LiveStream",
               constraints: {
-                deviceId: deviceId,
+                deviceId: selectedCamera,
                 width: { ideal: 1920 },
                 height: { ideal: 1080 },
               },
@@ -49,11 +82,9 @@ const useCodeScanner = (
           (err) => {
             if (err) {
               console.error("Quagga initialization error:", err);
-              setError(
-                new Error(`Scanner initialization failed: ${err.message}`)
-              );
               return;
             }
+            Quagga.start();
           }
         );
 
@@ -70,94 +101,21 @@ const useCodeScanner = (
             }
           }
         });
-
-        Quagga.start();
       } catch (err) {
         console.error("Scanner initialization error:", err);
-        setError(
-          err instanceof Error
-            ? err
-            : new Error("Scanner initialization failed")
-        );
-      }
-    },
-    [isScanning, options]
-  );
-
-  useEffect(() => {
-    const initializeCameras = async () => {
-      try {
-        await Quagga.CameraAccess.release();
-
-        const detectedCameras =
-          await Quagga.CameraAccess.enumerateVideoDevices();
-        setCameras(detectedCameras);
-
-        let cameraToUse = selectedCamera || "";
-
-        if (
-          !selectedCamera ||
-          !detectedCameras.find((cam) => cam.deviceId === selectedCamera)
-        ) {
-          const backCameras = detectedCameras.filter((device) =>
-            device.label.toLowerCase().includes("back")
-          );
-
-          const defaultCamera =
-            backCameras[backCameras.length - 1] ||
-            detectedCameras[detectedCameras.length - 1];
-
-          cameraToUse = defaultCamera.deviceId;
-          setSelectedCamera(cameraToUse);
-        }
-
-        await initScanner(cameraToUse);
-      } catch (err) {
-        console.error("Camera initialization error:", err);
-        setError(
-          err instanceof Error ? err : new Error("Camera initialization failed")
-        );
-        options?.onError?.(
-          err instanceof Error ? err : new Error("Camera initialization failed")
-        );
       }
     };
 
-    initializeCameras();
+    initScanner();
 
     return () => {
       Quagga.stop();
-      Quagga.CameraAccess.release();
     };
-  }, []); 
+  }, [selectedCamera, isScanning]);
 
-  const switchCamera = useCallback(
-    async (deviceId: string) => {
-      try {
-        await Quagga.stop();
-        await Quagga.CameraAccess.release();
-        setSelectedCamera(deviceId);
-        await initScanner(deviceId);
-      } catch (err) {
-        console.error("Error switching camera:", err);
-        setError(
-          err instanceof Error ? err : new Error("Failed to switch camera")
-        );
-      }
-    },
-    [initScanner, setSelectedCamera]
-  );
-
-  const toggleScanning = useCallback(() => {
-    setIsScanning((prev) => {
-      if (!prev) {
-        initScanner(selectedCamera || "");
-      } else {
-        Quagga.stop();
-      }
-      return !prev;
-    });
-  }, [selectedCamera, initScanner]);
+  const toggleScanning = () => {
+    setIsScanning(!isScanning);
+  };
 
   const toggleTorch = useCallback(() => {
     if (torchOn) {
@@ -168,6 +126,11 @@ const useCodeScanner = (
     setTorchOn(!torchOn);
   }, [torchOn]);
 
+  const switchCamera = (deviceId: string) => {
+    Quagga.stop();
+    setSelectedCamera(deviceId);
+  };
+
   return {
     scannerRef,
     scannedCode,
@@ -175,7 +138,7 @@ const useCodeScanner = (
     isScanning,
     toggleScanning,
     cameras,
-    selectedCamera: selectedCamera || "",
+    selectedCamera,
     switchCamera,
     torchOn,
     toggleTorch,
