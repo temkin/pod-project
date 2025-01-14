@@ -7,15 +7,24 @@ import {
 } from "@mui/icons-material";
 import { ROUTES } from "../../app";
 import { Layout, SignatureCanvas } from "../../components";
+import { useAppDispatch, createSignedCode, addSignedCode } from "../../store";
 import styles from "./styles";
 
 const SignatureScreen = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const barcodeCode = params.code || "";
 
   const handleRetry = () => {
+    navigate(ROUTES.SCAN);
+  };
+
+  const handleSaveSignature = (signature: string) => {
+    const signedCode = createSignedCode(barcodeCode, signature);
+    dispatch(addSignedCode(signedCode));
+
     navigate(ROUTES.SCAN);
   };
 
@@ -48,7 +57,7 @@ const SignatureScreen = () => {
         </Box>
 
         <Box sx={styles.signatureSection}>
-          <SignatureCanvas />
+          <SignatureCanvas onSave={handleSaveSignature} />
         </Box>
       </Stack>
     </Layout>

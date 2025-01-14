@@ -33,7 +33,7 @@ const Layout = ({ children, name }: PropsWithChildren<LayoutProps>) => {
             typography="small"
             color="common.white"
           >
-            v0.1.7
+            v0.1.8
           </Typography>
         </Box>
 
