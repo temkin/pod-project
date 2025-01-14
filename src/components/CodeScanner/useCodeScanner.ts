@@ -1,5 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import Quagga from "@ericblade/quagga2";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
+import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
 const useCodeScanner = (
@@ -13,105 +19,109 @@ const useCodeScanner = (
   const [selectedCamera, setSelectedCamera] = useState<string>("");
   const [torchOn, setTorchOn] = useState(false);
 
+  const onDetected = useCallback((result: QuaggaJSResultObject) => {
+    if (result.codeResult) {
+      const code = result.codeResult.code;
+      if (code) {
+        setScannedCode(code);
+        options?.onScan?.({
+          code,
+          raw: result,
+          timestamp: Date.now(),
+        });
+      }
+    }
+  }, []);
+
   useEffect(() => {
-    const initializeCameras = async () => {
-      try {
-        await Quagga.CameraAccess.request(null, {});
-        await Quagga.CameraAccess.release();
-
-        const detectedCameras =
-          await Quagga.CameraAccess.enumerateVideoDevices();
-        setCameras(detectedCameras);
-
-        if (detectedCameras.length > 0) {
-          const backCameras = detectedCameras.filter((device) => {
+    const enableCamera = async () => {
+      await Quagga.CameraAccess.request(null, {});
+    };
+    const disableCamera = async () => {
+      await Quagga.CameraAccess.release();
+    };
+    const enumerateCameras = async () => {
+      const cameras = await Quagga.CameraAccess.enumerateVideoDevices();
+      return cameras;
+    };
+    enableCamera()
+      .then(disableCamera)
+      .then(enumerateCameras)
+      .then((cameras) => {
+        setCameras(cameras);
+        if (cameras.length > 0) {
+          const backCameras = cameras.filter((device) => {
             return device.label.toLowerCase().includes("back");
           });
 
           const lastBackCamera = backCameras[backCameras.length - 1];
-          const lastCamera = detectedCameras[detectedCameras.length - 1];
+          const lastCamera = cameras[cameras.length - 1];
 
           const detectedSelectedCamera = lastBackCamera || lastCamera;
           setSelectedCamera(detectedSelectedCamera.deviceId);
         }
+      })
+      .then(() => Quagga.CameraAccess.disableTorch())
+      .catch((err) => {
+        setError(err);
+        options.onError?.(err);
+      });
 
-        await Quagga.CameraAccess.disableTorch();
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Camera initialization failed")
-        );
-        options?.onError?.(
-          err instanceof Error ? err : new Error("Camera initialization failed")
-        );
-      }
-    };
-
-    initializeCameras();
     return () => {
-      Quagga.CameraAccess.release();
+      disableCamera();
     };
   }, []);
 
-  useEffect(() => {
-    if (!scannerRef.current || !selectedCamera || !isScanning) return;
-
-    const initScanner = async () => {
-      try {
-        await Quagga.init(
-          {
-            inputStream: {
-              type: "LiveStream",
-              constraints: {
-                deviceId: selectedCamera,
-                width: { ideal: 1920 },
-                height: { ideal: 1080 },
-              },
-              target: scannerRef.current,
-              willReadFrequently: true,
-            },
-            locator: {
-              patchSize: "medium",
-              halfSample: true,
-              willReadFrequently: true,
-            },
-            decoder: {
-              readers: ["code_128_reader"],
-            },
-            locate: true,
-          },
-          (err) => {
-            if (err) {
-              console.error("Quagga initialization error:", err);
-              return;
-            }
-            Quagga.start();
-          }
-        );
-
-        Quagga.onDetected((result) => {
-          if (result.codeResult) {
-            const code = result.codeResult.code;
-            if (code) {
-              setScannedCode(code);
-              options?.onScan?.({
-                code,
-                raw: result,
-                timestamp: Date.now(),
-              });
-            }
-          }
-        });
-      } catch (err) {
-        console.error("Scanner initialization error:", err);
+  useLayoutEffect(() => {
+    let ignoreStart = false;
+    const init = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      if (ignoreStart) {
+        return;
       }
+
+      await Quagga.init(
+        {
+          inputStream: {
+            type: "LiveStream",
+            constraints: {
+              deviceId: selectedCamera,
+              width: { ideal: 1920 },
+              height: { ideal: 1080 },
+            },
+            target: scannerRef.current,
+            willReadFrequently: true,
+          },
+          locator: {
+            patchSize: "medium",
+            halfSample: true,
+            willReadFrequently: true,
+          },
+          decoder: {
+            readers: ["code_128_reader"],
+          },
+          locate: true,
+        },
+        async (err) => {
+          if (err) {
+            return console.error("Error starting Quagga:", err);
+          }
+
+          if (scannerRef && scannerRef.current) {
+            await Quagga.start();
+          }
+        }
+      );
+
+      Quagga.onDetected(onDetected);
     };
-
-    initScanner();
-
+    init();
     return () => {
+      ignoreStart = true;
       Quagga.stop();
+      Quagga.offDetected(onDetected);
     };
-  }, [selectedCamera, isScanning]);
+  }, [selectedCamera, onDetected, scannerRef]);
 
   const toggleScanning = () => {
     setIsScanning(!isScanning);
