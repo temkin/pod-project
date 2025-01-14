@@ -5,44 +5,18 @@ import {
   QrCodeOutlined as QrCodeOutlinedIcon,
   RefreshOutlined as RefreshOutlinedIcon,
 } from "@mui/icons-material";
-import { useNotifications } from "@toolpad/core";
 import { ROUTES } from "../../app";
 import { Layout, SignatureCanvas } from "../../components";
-import {
-  NOTIFICATIONS_DEFAULT_TIMEOUT,
-  NOTIFICATIONS_SEVERITIES,
-} from "../../lib";
-import { useAppDispatch, createSignedCode, addSignedCode } from "../../store";
 import styles from "./styles";
 
 const SignatureScreen = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const notifications = useNotifications();
 
   const barcodeCode = params.code || "";
 
   const handleRetry = () => {
     navigate(ROUTES.SCAN);
-  };
-
-  const handleSaveSignature = (signature: string) => {
-    const signedCode = createSignedCode(barcodeCode, signature);
-    dispatch(addSignedCode(signedCode));
-
-    notifications.show("Signature saved successfully", {
-      severity: NOTIFICATIONS_SEVERITIES.SUCCESS,
-      autoHideDuration: NOTIFICATIONS_DEFAULT_TIMEOUT,
-    });
-
-    navigate(ROUTES.SCAN);
-  };
-
-  const handleErrorSignature = (error: Error) => {
-    notifications.show(error.message, {
-      severity: NOTIFICATIONS_SEVERITIES.ERROR,
-    });
   };
 
   return (
@@ -74,10 +48,7 @@ const SignatureScreen = () => {
         </Box>
 
         <Box sx={styles.signatureSection}>
-          <SignatureCanvas
-            onSave={handleSaveSignature}
-            onError={handleErrorSignature}
-          />
+          <SignatureCanvas />
         </Box>
       </Stack>
     </Layout>

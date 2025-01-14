@@ -16,24 +16,14 @@ import {
   CalendarToday as CalendarTodayIcon,
   AccessTime as AccessTimeIcon,
 } from "@mui/icons-material";
-import { useNotifications } from "@toolpad/core";
-import {
-  NOTIFICATIONS_DEFAULT_TIMEOUT,
-  NOTIFICATIONS_SEVERITIES,
-} from "../../lib";
 import { SignedCode } from "../../store/types";
 import styles from "./styles";
 
 const SignedCodeHistoryItem = ({ item }: { item: SignedCode }) => {
   const [expanded, setExpanded] = useState(false);
-  const notifications = useNotifications();
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    notifications.show("Code copied to clipboard", {
-      severity: NOTIFICATIONS_SEVERITIES.INFO,
-      autoHideDuration: NOTIFICATIONS_DEFAULT_TIMEOUT,
-    });
   };
 
   const date = new Date(item.timestamp).toLocaleDateString();

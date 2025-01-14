@@ -1,6 +1,5 @@
 import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
-import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { ThemeProvider } from "@mui/material";
 import store from "../store";
 import { MODES } from "../env";
@@ -14,9 +13,7 @@ const App = () => {
     <Provider store={store}>
       <ThemeProvider theme={lightTheme}>
         <BrowserRouter basename={basename}>
-          <NotificationsProvider>
             <Root />
-          </NotificationsProvider>
         </BrowserRouter>
       </ThemeProvider>
     </Provider>
