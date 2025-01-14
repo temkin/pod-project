@@ -7,6 +7,9 @@ import {
 } from "react";
 import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
+import { useLocalStorage } from "react-use";
+
+const SELECTED_CAMERA_KEY = "selectedCamera";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -16,7 +19,10 @@ const useCodeScanner = (
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string>("");
+  const [selectedCamera, setSelectedCamera] = useLocalStorage<string>(
+    SELECTED_CAMERA_KEY,
+    ""
+  );
   const [torchOn, setTorchOn] = useState(false);
 
   const onDetected = useCallback((result: QuaggaJSResultObject) => {
@@ -49,7 +55,7 @@ const useCodeScanner = (
       .then(enumerateCameras)
       .then((cameras) => {
         setCameras(cameras);
-        if (cameras.length > 0) {
+        if (cameras.length > 0 && !selectedCamera) {
           const backCameras = cameras.filter((device) => {
             return device.label.toLowerCase().includes("back");
           });
@@ -64,18 +70,17 @@ const useCodeScanner = (
       .then(() => Quagga.CameraAccess.disableTorch())
       .catch((err) => {
         setError(err);
-        options.onError?.(err);
       });
 
     return () => {
       disableCamera();
     };
-  }, []);
+  }, [selectedCamera]);
 
   useLayoutEffect(() => {
     let ignoreStart = false;
     const init = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       if (ignoreStart) {
         return;
       }
@@ -104,6 +109,7 @@ const useCodeScanner = (
         },
         async (err) => {
           if (err) {
+            options.onError?.(err);
             return console.error("Error starting Quagga:", err);
           }
 
@@ -148,7 +154,7 @@ const useCodeScanner = (
     isScanning,
     toggleScanning,
     cameras,
-    selectedCamera,
+    selectedCamera: selectedCamera || "",
     switchCamera,
     torchOn,
     toggleTorch,
