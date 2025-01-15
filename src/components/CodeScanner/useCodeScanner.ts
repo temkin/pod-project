@@ -50,6 +50,8 @@ const useCodeScanner = (
       const cameras = await Quagga.CameraAccess.enumerateVideoDevices();
       return cameras;
     };
+
+    // see https://github.com/ericblade/quagga2-react-example/blob/master/src/App.js#L15
     enableCamera()
       .then(disableCamera)
       .then(enumerateCameras)
@@ -78,8 +80,10 @@ const useCodeScanner = (
   }, [selectedCamera]);
 
   useLayoutEffect(() => {
+    // see https://github.com/ericblade/quagga2-react-example/blob/master/src/Scanner.js#L89
     let ignoreStart = false;
     const init = async () => {
+      // see https://github.com/ericblade/quagga2-react-example/blob/master/src/Scanner.js#L95
       await new Promise((resolve) => setTimeout(resolve, 1000));
       if (ignoreStart) {
         return;
