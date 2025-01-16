@@ -8,7 +8,7 @@ import {
 import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
 
-const SELECTED_CAMERA_KEY = "selectedCamera";
+const SELECTED_CAMERA_KEY = "selectedCameraDeviceId";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -79,6 +79,10 @@ const useCodeScanner = (
   }, []);
 
   useLayoutEffect(() => {
+    if (!selectedCamera) {
+      return;
+    }
+
     // see https://github.com/ericblade/quagga2-react-example/blob/master/src/Scanner.js#L89
     let ignoreStart = false;
     const init = async () => {
@@ -93,7 +97,7 @@ const useCodeScanner = (
           inputStream: {
             type: "LiveStream",
             constraints: {
-              deviceId: selectedCamera ? { exact: selectedCamera } : undefined,
+              deviceId: { exact: selectedCamera },
               width: { ideal: 1920 },
               height: { ideal: 1080 },
             },
