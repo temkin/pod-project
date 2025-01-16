@@ -7,9 +7,8 @@ import {
 } from "react";
 import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import { UseCodeScannerOptions, UseCodeScannerReturn } from "./types";
-import { useLocalStorage } from "react-use";
 
-const SELECTED_CAMERA_KEY = "selectedCamera";
+const SELECTED_CAMERA_KEY = "selectedCameraDeviceId";
 
 const useCodeScanner = (
   options: UseCodeScannerOptions = {}
@@ -19,10 +18,7 @@ const useCodeScanner = (
   const [error, setError] = useState<Error | null>(null);
   const [isScanning, setIsScanning] = useState(true);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useLocalStorage<string>(
-    SELECTED_CAMERA_KEY,
-    ""
-  );
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
   const [torchOn, setTorchOn] = useState(false);
 
   const onDetected = useCallback((result: QuaggaJSResultObject) => {
@@ -57,16 +53,19 @@ const useCodeScanner = (
       .then(enumerateCameras)
       .then((cameras) => {
         setCameras(cameras);
-        if (cameras.length > 0 && !selectedCamera) {
+        if (cameras.length > 0) {
           const backCameras = cameras.filter((device) => {
             return device.label.toLowerCase().includes("back");
           });
 
-          const lastBackCamera = backCameras[backCameras.length - 1];
-          const lastCamera = cameras[cameras.length - 1];
+          const lastBackCameraId =
+            backCameras[backCameras.length - 1]?.deviceId;
+          const lastCameraId = cameras[cameras.length - 1]?.deviceId;
 
-          const detectedSelectedCamera = lastBackCamera || lastCamera;
-          setSelectedCamera(detectedSelectedCamera.deviceId);
+          const selectedCameraId = localStorage.getItem(SELECTED_CAMERA_KEY);
+          const cameraId = selectedCameraId || lastBackCameraId || lastCameraId;
+
+          setSelectedCamera(cameraId);
         }
       })
       .then(() => Quagga.CameraAccess.disableTorch())
@@ -77,14 +76,18 @@ const useCodeScanner = (
     return () => {
       disableCamera();
     };
-  }, [selectedCamera]);
+  }, []);
 
   useLayoutEffect(() => {
+    if (!selectedCamera) {
+      return;
+    }
+
     // see https://github.com/ericblade/quagga2-react-example/blob/master/src/Scanner.js#L89
     let ignoreStart = false;
     const init = async () => {
       // see https://github.com/ericblade/quagga2-react-example/blob/master/src/Scanner.js#L95
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1));
       if (ignoreStart) {
         return;
       }
@@ -94,7 +97,7 @@ const useCodeScanner = (
           inputStream: {
             type: "LiveStream",
             constraints: {
-              deviceId: selectedCamera,
+              deviceId: { exact: selectedCamera },
               width: { ideal: 1920 },
               height: { ideal: 1080 },
             },
@@ -149,6 +152,7 @@ const useCodeScanner = (
   const switchCamera = (deviceId: string) => {
     Quagga.stop();
     setSelectedCamera(deviceId);
+    localStorage.setItem(SELECTED_CAMERA_KEY, deviceId);
   };
 
   return {
@@ -158,7 +162,7 @@ const useCodeScanner = (
     isScanning,
     toggleScanning,
     cameras,
-    selectedCamera: selectedCamera || "",
+    selectedCamera,
     switchCamera,
     torchOn,
     toggleTorch,
