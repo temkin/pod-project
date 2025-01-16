@@ -1,4 +1,3 @@
-// CodeScanner.tsx
 import { Box, Typography, Select, MenuItem, IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import FlashlightOnIcon from "@mui/icons-material/FlashlightOn";
