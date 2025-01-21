@@ -2,7 +2,8 @@ import { Box, Typography, Select, MenuItem, IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import FlashlightOnIcon from "@mui/icons-material/FlashlightOn";
 import FlashlightOffIcon from "@mui/icons-material/FlashlightOff";
-import useCodeScanner from "./useCodeScanner";
+// import useCodeScanner from "./useCodeScanner";
+import useCodeScanner from "./useCodeScanner2";
 import styles from "./styles";
 import { CodeScannerProps } from "./types";
 

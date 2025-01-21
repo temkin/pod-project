@@ -78,6 +78,7 @@ const useCodeScanner = (
     };
   }, []);
 
+
   useLayoutEffect(() => {
     if (!selectedCamera) {
       return;
